@@ -11,8 +11,13 @@ public class TrainModel extends Observable {
 	private DepartingTrain train;
 	
 	
+	
 	public TrainModel() {
 		train = new DepartingTrain();
+		
+	}
+	
+	public void setLocoPower(){
 		
 	}
 	

@@ -14,7 +14,7 @@ public class TrainController {
 	public TrainController(TrainModel model, TrainGUI gui) {
 		this.model = model;
 		this.view = gui;
-		gui.addActionListener(new TrainListener());
+		//gui.addActionListener(new TrainListener());
 		
 	}
 	
