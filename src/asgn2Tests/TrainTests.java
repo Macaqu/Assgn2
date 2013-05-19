@@ -7,8 +7,19 @@ import org.junit.Test;
 import asgn2Exceptions.TrainException;
 import asgn2RollingStock.*;
 
+/**
+ * Test for DepartingTrain class. 
+ * This test will track the configuration and passenger boarding status of whole train
+ * @author Yudo Dwi Hanggodo Patriabekti
+ * @version May 2013
+ * 
+ * */
 public class TrainTests {
 
+	/**
+	 * Create test for Departing train
+	 * 
+	 * */
 	@Test
 	public void testCreateTrain()
 	{
@@ -17,6 +28,11 @@ public class TrainTests {
 		asgn2Train.DepartingTrain departingTrain = new asgn2Train.DepartingTrain();
 	}
 	
+	/**
+	 * Create test for adding locomotive through the departing train
+	 * Start with gross weight and classification input
+	 * 
+	 * */
 	@Test
 	public void testAddLocomotive() throws TrainException
 	{
@@ -27,6 +43,11 @@ public class TrainTests {
 		train.addCarriage((asgn2RollingStock.RollingStock)newCarriage);
 	}
 	
+	/**
+	 * Create test does the train can move the departing train or not
+	 * Start with valid input of gross weight and classification
+	 * 
+	 * */
 	@Test
 	public void testTrainCanMove() throws TrainException
 	{
@@ -40,6 +61,12 @@ public class TrainTests {
 		assertTrue(trainCanMove);
 	}
 	
+	/**
+	 * Create test to remove carriage
+	 * Start with valid input of gross weight and classification
+	 * Continue with adding another carriage with specific classification
+	 * 
+	 * */
 	@Test
 	public void testRemoveCarriage() throws TrainException
 	{
@@ -61,6 +88,11 @@ public class TrainTests {
 		assertFalse(train.nextCarriage() instanceof FreightCar);
 	}
 	
+	/**
+	 * Create test for first carriage on departing train
+	 * start with valid input of gross weight and classification
+	 * 
+	 * */
 	@Test
 	public void testFirstCarriage() throws TrainException
 	{
@@ -77,6 +109,12 @@ public class TrainTests {
 		assertTrue(firstCarriage instanceof Locomotive);
 	}
 	
+	/**
+	 * Create test for the next carriage
+	 * Start with adding locomotive valid input
+	 * continue with another carriage valid input
+	 * 
+	 * */
 	@Test
 	public void testNextCarriage() throws TrainException
 	{
@@ -100,7 +138,12 @@ public class TrainTests {
 	}
 	
 	
-	
+	/**
+	 * Create test for passenger board on departing train
+	 * Start with adding locomotive valid input
+	 * continue with adding carriage valid input
+	 * followed by passenger valid input
+	 * */
 	@Test
 	public void testPassengerBoard() throws TrainException
 	{
@@ -126,6 +169,12 @@ public class TrainTests {
 		assertEquals(expectedpsgNotGetSeat, actualpsgNotGetSeat);
 	}
 	
+	/**
+	 * Create test to get number passenger on departing train
+	 * Start with adding locomotive valid input
+	 * continue with adding another carriage valid input 
+	 * with specific number of passenger valid input
+	 * */
 	@Test
 	public void testGetNumberOnBoard() throws TrainException
 	{
@@ -151,8 +200,14 @@ public class TrainTests {
 		assertEquals(newPassengers, actualpsgOnBoard);
 	}
 
+	/**
+	 * Create test to get number of seat in passenger car
+	 * Start with adding locomotive valid input
+	 * continue with adding first and second passenger car valid input
+	 * 
+	 * */
 	@Test
-	public void testGetNumberfSeats() throws TrainException
+	public void testGetNumberOfSeats() throws TrainException
 	{
 		asgn2Train.DepartingTrain train = new asgn2Train.DepartingTrain();
 		
@@ -180,6 +235,12 @@ public class TrainTests {
 		assertEquals(expectedNumOfSeats, actualNumOfSeats);
 	}
 	
+	/**
+	 * Create test to testToString departing train
+	 * Started with adding locomotive valid input,
+	 * continue with passenger and freight car valid input.
+	 * Expected string output of departing train
+	 * */
 	@Test
 	public void testToString() throws TrainException
 	{
@@ -214,6 +275,12 @@ public class TrainTests {
 
 	//Test TrainException in addCarriage() 
 	
+	/**
+	 * Create test first train behind locomotive car
+	 * Start with adding freight car valid input
+	 * expecting TrainException class
+	 * 
+	 * */
 	@Test(expected = TrainException.class)
 	public void testFirstTrainNotLocomotive() throws TrainException
 	{
@@ -229,6 +296,12 @@ public class TrainTests {
 		train.board(newPassengers);
 	}
 	
+	/**
+	 * Create test for locomotive more than one on the same departing train
+	 * Start with adding first locomotive valid input,
+	 * continue with the second locomotive valid input.
+	 * Expecting TrainException class
+	 * */
 	@Test(expected = TrainException.class)
 	public void testLocomotiveMoreThanOne() throws TrainException
 	{
@@ -248,6 +321,12 @@ public class TrainTests {
 			
 	}
 	
+	/**
+	 * Create test for adding Freight car while passenger on board
+	 * Start with adding locomotive valid input, passengerCar valid input followed by passenger on board 
+	 * continue with adding freight car valid input
+	 * 
+	 * */
 	@Test(expected = TrainException.class)
 	public void testAddingFreightWhilePassengersOnBoard() throws TrainException
 	{
@@ -275,7 +354,12 @@ public class TrainTests {
 		train.addCarriage(freightCar);
 		
 	}
-	 
+	
+	/**
+	 * Create test to disallowed configuration
+	 * Start with valid input of locomotive, freight car and passenger car
+	 * Expecting TrainException class
+	 * */
 	@Test(expected = TrainException.class)
 	public void testDissalowedConfiguration() throws TrainException
 	{
@@ -301,6 +385,12 @@ public class TrainTests {
 	}
 	
 	//test train exception in board()
+	/**
+	 * Create test for negative new passenger
+	 * Start with adding locomotive and passenger cars valid input
+	 * continue with adding negative input to passenger car
+	 * Expecting TrainException class
+	 * */
 	@Test(expected = TrainException.class)
 	public void testNegativeNewPassengers() throws TrainException
 	{
@@ -322,7 +412,10 @@ public class TrainTests {
 		train.board(newPassengers);
 	}
 	
-	//test train exception in board()
+	/**
+	 * Create test train exception on board
+	 * 
+	 * */
 	@Test
 	public void testFirstCarriageBeforeAddingCarriage() throws TrainException
 	{

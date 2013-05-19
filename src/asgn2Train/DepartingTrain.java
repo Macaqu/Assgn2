@@ -56,51 +56,48 @@ public class DepartingTrain extends Object {
 	public void addCarriage(RollingStock newCarriage) throws TrainException {
 		
 		if(!isConfigurationRight(newCarriage)){
-			throw new TrainException("Disallow configuration");
+			throw new TrainException("Cannot Add Carriage - Invalid Train configuration");
 		}
 		
 		if(isThereAnyPassengerOnBoard()){
-			throw new TrainException("There are passengers in the train");
+			throw new TrainException("Cannot Add Carriage - There are passengers in the train");
 		}
 	
-		tryToAddNewCarriage(newCarriage);
-		
+		train.add(newCarriage);
+		addNumberOfSeats(newCarriage);
+		addGrossWeight(newCarriage);
 	}
 
 	
-	private void tryToAddNewCarriage(RollingStock newCarriage){
-		train.add(newCarriage);
-		
-		if(isAddingCarNotSuccesful()){
-			removeCarriage();
-		}
-		else {
-			addNumberOfSeats(newCarriage);
-			addGrossWeight(newCarriage);
-		}
-	}
 	
+	/**
+	 * 
+	 * */
 	private void addGrossWeight(RollingStock newCarriage){
 		grossWeight += newCarriage.getGrossWeight();
 	}
 	
+	/**
+	 * 
+	 * */
 	private void addNumberOfSeats(RollingStock newCarriage){
 		
 		if(newCarriage instanceof PassengerCar){
 			numberOfSeats += ((PassengerCar) newCarriage).numberOfSeats();
 		}
-		
-	}
-	
-	private boolean isAddingCarNotSuccesful(){
-		return train.size() > 0 && !trainCanMove();
 	}
 	
 	
+	/**
+	 * 
+	 * */
 	private boolean isThereAnyPassengerOnBoard(){
 		return train.size() > 0 && numberOnBoard() != 0;
 	}
 	
+	/**
+	 * Return true if the train in valid configuration
+	 * */
 	private boolean isConfigurationRight(RollingStock newCarriage){
 		if(newCarriage instanceof PassengerCar){
 			return !isPreviousCarNull() && (isPreviousCarLoco()|| isPreviousCarPassengerCar());
@@ -108,30 +105,42 @@ public class DepartingTrain extends Object {
 		} else if(newCarriage instanceof FreightCar){
 			return !isPreviousCarNull() && (isPreviousCarPassengerCar() || isPreviousCarFreightCar() 
 					|| isPreviousCarLoco());
-		
 		} else {
 			return isPreviousCarNull();
 		}
-		
 	}
 	
+	/**
+	 * 
+	 * */
 	private boolean isPreviousCarNull(){
 		return train.size() == 0;
 	}
 	
+	/**
+	 * 
+	 * */
 	private boolean isPreviousCarPassengerCar(){
 		return (train.get(train.size()-1) instanceof PassengerCar);
 	}
 	
+	/**
+	 * 
+	 * */
 	private boolean isPreviousCarLoco(){
 		return (train.get(train.size()-1) instanceof Locomotive);
 	}
 	
+	/**
+	 * 
+	 * */
 	private boolean isPreviousCarFreightCar(){
 		return (train.get(train.size()-1) instanceof FreightCar);
 	}
 	
-	
+	/**
+	 * 
+	 * */
 	public boolean trainCanMove() {
 		Locomotive locomotive = (Locomotive)train.get(0);
 		
@@ -141,13 +150,21 @@ public class DepartingTrain extends Object {
 	/**
 	 * Removes the last carriage from the train. (This may be the locomotive if it is the only item of rolling stock on the train.) 
 	 * However, shunting operations may not be performed if there are passengers on the train.
+	 * @throws TrainException 
 	 * 
 	 *  @throws : TrainException - if there is no rolling stock on the "train", or if there are passengers on the train.
 	 * */
-	public void removeCarriage() {
-		if(train.size()>1){
-			train.remove(train.size()-1);
+	public void removeCarriage() throws TrainException {
+		if(train.size() == 0){
+			throw new TrainException("Cannot remove carriage - There is no rolling stock on the train");
 		}
+		
+		if(numberOnBoard() != 0){
+			throw new TrainException("Cannot remove carriage - There are passengers on the train");
+		}
+		
+		train.remove(train.size()-1);
+		
 	}
 
 	
@@ -173,7 +190,9 @@ public class DepartingTrain extends Object {
 		return nextCarriage;
 	}
 
-	
+	/**
+	 * 
+	 * */
 	private boolean canNextCarriageGetted(){
 		return this.nextCarriageNumber < train.size();
 	}
@@ -191,7 +210,6 @@ public class DepartingTrain extends Object {
 				numberOnBoard += ((PassengerCar)train.get(i)).numberOnBoard();
 			}
 		}
-		
 		return numberOnBoard;
 	}
 
@@ -206,9 +224,9 @@ public class DepartingTrain extends Object {
 	 * */
 	public Integer board(Integer newPassengers) throws TrainException {
 		if(newPassengers < 0 ){
-			throw new TrainException("new passenger cannot be negative");
+			throw new TrainException("Cannot board - new passenger cannot be negative");
 		}
-		else if(this.numberOnBoard() + newPassengers <= this.numberOfSeats){
+		else if(isSeatAvailable(newPassengers)){
 			for(int i = 1; i < train.size(); i++){
 				if(train.get(i) instanceof PassengerCar){
 					newPassengers = ((PassengerCar)train.get(i)).board(newPassengers);
@@ -224,6 +242,13 @@ public class DepartingTrain extends Object {
 		}
 	}
 
+	/**
+	 * 
+	 * */
+	private boolean isSeatAvailable(Integer newPassengers){
+		return this.numberOnBoard() + newPassengers <= this.numberOfSeats;
+	}
+	
 	/**
 	 * Returns the first carriage on the train (which must be a locomotive). 
 	 * Special value null is returned if there are no carriages on the train at all.
