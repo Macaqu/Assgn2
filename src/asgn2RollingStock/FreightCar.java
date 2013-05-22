@@ -35,7 +35,7 @@ public class FreightCar extends RollingStock {
 	
 	private boolean isValidGoodsType(String goodsType)
 	{
-		return goodsType.equals("G") || goodsType.equals("R")  || goodsType.equals("D") ; 
+		return (goodsType.equals("G") || goodsType.equals("R")|| goodsType.equals("D")) ; 
 	}
 
 	/**

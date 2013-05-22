@@ -8,11 +8,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+
+/**
+ * @author Lalu Fahany Yazikri
+ */
 public class TrainGUI extends JFrame implements Observer {
 
-	/**
-	 * author : Lalu Fahany Yazikri
-	 */
 	private static final long serialVersionUID = -5269332274129183251L;
 
 	public static final int WIDTH = 1000;
@@ -56,7 +57,8 @@ public class TrainGUI extends JFrame implements Observer {
 	private JTextField txtNumPassengers;
 	private JTextField txtNumOfSeats;
 
-	
+	//Scroll Pane
+	private JScrollPane scrlImages;
 	
 	public TrainGUI(){
 		super("Train Simulation");
@@ -99,7 +101,7 @@ public class TrainGUI extends JFrame implements Observer {
 	public void updateDriverInfo(String message){
 		this.displayDriverInfo.append(message + newline);
 		displayDriverInfo.update(displayDriverInfo.getGraphics());
-		//displayDriverInfo.setCaretPosition(displayDriverInfo.getDocument().getLength());
+		displayDriverInfo.setCaretPosition(displayDriverInfo.getDocument().getLength());
 	}
 	
 	/**
@@ -187,8 +189,15 @@ public class TrainGUI extends JFrame implements Observer {
 	private void settingLayout() {
 		pnlImages = new JPanel();
 		pnlImages.setBackground(Color.blue);
-		pnlImages.setPreferredSize(new Dimension(500, 150));
-		getContentPane().add(new JScrollPane(pnlImages), BorderLayout.PAGE_START);
+		//pnlImages.setPreferredSize(new Dimension(500, 150));
+		
+		scrlImages = new JScrollPane();
+		scrlImages.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		scrlImages.setPreferredSize(new Dimension(950, 150));
+		pnlImages.add(scrlImages);
+		
+		
+		getContentPane().add(pnlImages, BorderLayout.PAGE_START);
 		
 		pnlDriver = new JPanel();
 		pnlDriver.setBackground(Color.yellow);
@@ -409,6 +418,26 @@ public class TrainGUI extends JFrame implements Observer {
 	
 	public void setTxtNumOfSeats(Integer numOfSeats){
 		this.txtNumOfSeats.setText(numOfSeats.toString());
+	}
+	
+}
+
+class CarriageImage extends JComponent {
+	
+	public CarriageImage(TrainModel.CarriageTypes type){
+		
+		Color color;
+		switch(type){
+		case Locomotive : color = Color.RED;
+		case PassengerCar : color = Color.CYAN;
+		case FreightCar : color = Color.BLUE;
+		}
+		
+		
+	}
+	
+	public void paint(Graphics g){
+		
 	}
 	
 }

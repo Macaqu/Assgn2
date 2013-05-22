@@ -29,18 +29,12 @@ public class DepartingTrain extends Object {
 	
 	private Integer nextCarriageNumber;
 	
-	private Integer numberOfSeats;
-	
-	private Integer grossWeight; //in tonnes
-	
 	/**
 	 * Constructs a (potential) train object containing no carriages (yet).
 	 * */
 	public DepartingTrain(){
 		train = new ArrayList<RollingStock>();
 		nextCarriageNumber = 1;
-		numberOfSeats = 0;
-		grossWeight = 0;
 	}
 	
 	/**
@@ -64,28 +58,8 @@ public class DepartingTrain extends Object {
 		}
 	
 		train.add(newCarriage);
-		addNumberOfSeats(newCarriage);
-		addGrossWeight(newCarriage);
 	}
 
-	
-	
-	/**
-	 * 
-	 * */
-	private void addGrossWeight(RollingStock newCarriage){
-		grossWeight += newCarriage.getGrossWeight();
-	}
-	
-	/**
-	 * 
-	 * */
-	private void addNumberOfSeats(RollingStock newCarriage){
-		
-		if(newCarriage instanceof PassengerCar){
-			numberOfSeats += ((PassengerCar) newCarriage).numberOfSeats();
-		}
-	}
 	
 	
 	/**
@@ -144,7 +118,18 @@ public class DepartingTrain extends Object {
 	public boolean trainCanMove() {
 		Locomotive locomotive = (Locomotive)train.get(0);
 		
-		return (locomotive.power() > grossWeight);
+		return (locomotive.power() > getGrossWeight());
+	}
+
+	/**
+	 * Return total gross weight of this train
+	 * */
+	private Integer getGrossWeight() {
+		Integer grossWeight = 0;
+		for(int idx = 0; idx < train.size(); idx++){
+			grossWeight += train.get(idx).getGrossWeight();
+		}
+		return grossWeight;
 	}
 
 	/**
@@ -226,19 +211,24 @@ public class DepartingTrain extends Object {
 		if(newPassengers < 0 ){
 			throw new TrainException("Cannot board - new passenger cannot be negative");
 		}
-		else if(isSeatAvailable(newPassengers)){
+		
+		if(isSeatAvailable(newPassengers)){
 			for(int i = 1; i < train.size(); i++){
+				
 				if(train.get(i) instanceof PassengerCar){
 					newPassengers = ((PassengerCar)train.get(i)).board(newPassengers);
 				}
+				
 				if(newPassengers == 0){
 					break;
 				}
 			}
 			return 0;
 		}
-		else{
-			return this.numberOnBoard() + newPassengers - this.numberOfSeats;
+		else{ //if seat not available
+			
+			//return number people cannot board 
+			return this.numberOnBoard() + newPassengers - numberOfSeats();
 		}
 	}
 
@@ -246,7 +236,7 @@ public class DepartingTrain extends Object {
 	 * 
 	 * */
 	private boolean isSeatAvailable(Integer newPassengers){
-		return this.numberOnBoard() + newPassengers <= this.numberOfSeats;
+		return this.numberOnBoard() + newPassengers <= numberOfSeats();
 	}
 	
 	/**
@@ -272,8 +262,16 @@ public class DepartingTrain extends Object {
 	 * @return : the number of seats on the train
 	 * */
 	public Integer numberOfSeats() {
+		Integer numberOfSeats = 0;
 		
-		return this.numberOfSeats;
+		for(int idx = 0; idx < train.size(); idx++){
+			RollingStock carriage = train.get(idx);
+			if(carriage instanceof PassengerCar){
+				numberOfSeats += ((PassengerCar)carriage).numberOfSeats();
+			}
+		}
+		
+		return numberOfSeats;
 	}
 
 	/**

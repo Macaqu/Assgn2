@@ -18,8 +18,10 @@ import asgn2Exceptions.TrainException;
 public class RollingStockTests {
  
 	/**
-	 * Create test for FreightCar class 
-	 * start test with calling valid good type and gross weight
+	 * Create FreightCar class in asgn2RollingStock that implement RollingStock.
+	 * Passing parameter grossWeight and goodsType. Both parameters are in Integer type.
+	 * 
+	 * note: passing grossWeight to abstract parameter
 	 * */
 	@Test
 	public void testCreateFreightCar() throws TrainException {
@@ -33,8 +35,11 @@ public class RollingStockTests {
 	}
 	
 	/**
-	 * Create test for FreightCar class 
-	 * Start test with calling valid good type and invalid gross weight
+	 * Test with calling valid good type and invalid gross weight
+	 * Check whether TrainException in abstract class can be implemented in FreightCar.class
+	 * when calling invalid gross weight
+	 * 
+	 * @exception TrainException.class
 	 * */
 	@Test(expected = TrainException.class)
 	public void testCreateFreightCarWithInvalidGrossWeight() throws TrainException
@@ -48,8 +53,10 @@ public class RollingStockTests {
 	}
 	
 	/**
-	 * Create test for FreightCar class
-	 * start test with calling invalid good type and valid gross weight
+	 * Test for FreightCar class with calling invalid good type and valid gross weight.
+	 * Create TrainException in FreightCar constructor when invalid good type is supplied.
+	 * 
+	 * @exception TrainException.class
 	 * */
 	@Test(expected = TrainException.class)
 	public void testCreateFreightCarWithInvalidGoodsType() throws TrainException
@@ -63,10 +70,11 @@ public class RollingStockTests {
 	}
 	
 	/**
-	 * Create test for freight car 
-	 * Start test with calling null good type and valid gross weight
+	 * Test for freight car with calling null good type and valid gross weight
+	 * 
+	 * @exception NullPointerException.class
 	 * */
-	@Test(expected = TrainException.class)
+	@Test(expected = NullPointerException.class)
 	public void testCreateFreightCarWithInvalidNullGoodsType() throws TrainException
 	{
 		String invalidNullGoodsType = null;
@@ -78,8 +86,10 @@ public class RollingStockTests {
 	}
 	
 	/**
-	 * Create test for freight car 
-	 * Start test with calling both invalid good type and gross weight
+	 * Test for FreightCar class with calling invalid good type and invalid gross weight.
+	 * Check whether both invalid arguments produce TrainException
+	 * 
+	 * @exception TrainException.class
 	 * */
 	@Test(expected = TrainException.class)
 	public void testCreateFreightCarWithInvalidBothArguments() throws TrainException
@@ -93,8 +103,8 @@ public class RollingStockTests {
 	}
 	
 	/**
-	 * Create test for Gross weight of Freight car
-	 * Start the test with calling valid gross weight for valid goods type
+	 * Create getGrossWeight() in FreightCar class with Integer data type.
+	 * This method is accessor for grossWeight in FreightCar class.
 	 * */
 	@Test
 	public void testGetGrossWeightOfFreightCar() throws TrainException
@@ -102,15 +112,15 @@ public class RollingStockTests {
 		Integer grossWeight = 1;
 		String goodsType = "G";
 		
-		asgn2RollingStock.RollingStock freightCarUnderTest =  new asgn2RollingStock.FreightCar(grossWeight, goodsType);
+		asgn2RollingStock.RollingStock freightCarUnderTest =  
+				new asgn2RollingStock.FreightCar(grossWeight, goodsType);
 		
 		assertEquals(grossWeight, freightCarUnderTest.getGrossWeight());
 	}
 	
 	/**
-	 * Create test to get good type of freight car
-	 * start the test with calling valid gross weight and goods type
-	 * 
+	 * Create goodsType() in FreightCar class with String data type.
+	 * This method is accessor for goodsType in FreightCar class.
 	 * */
 	@Test
 	public void testGetGoodsTypeOfFreightCar() throws TrainException
@@ -118,16 +128,15 @@ public class RollingStockTests {
 		Integer grossWeight = 1;
 		String goodsType = "G";
 		
-		asgn2RollingStock.RollingStock freightCarUnderTest =  new asgn2RollingStock.FreightCar(grossWeight, goodsType);
+		asgn2RollingStock.RollingStock freightCarUnderTest =  
+				new asgn2RollingStock.FreightCar(grossWeight, goodsType);
 		
 		assertEquals(goodsType, ((asgn2RollingStock.FreightCar) freightCarUnderTest).goodsType());
 	}
 	
 	/**
-	 * Create test for FreightCar class 
-	 * Start with valid gross weight and goodsType
-	 * Expected valid string goods type output 
-	 * 
+	 * Create toString() method in FreightCar class that represent FreightCar
+	 * in string.
 	 * */
 	@Test
 	public void testFreightCarToString() throws TrainException
@@ -135,7 +144,8 @@ public class RollingStockTests {
 		Integer grossWeight = 1;
 		String goodsType = "G";
 		
-		asgn2RollingStock.RollingStock freightCarUnderTest =  new asgn2RollingStock.FreightCar(grossWeight, goodsType);
+		asgn2RollingStock.RollingStock freightCarUnderTest =  
+				new asgn2RollingStock.FreightCar(grossWeight, goodsType);
 		
 		String expectedString = "Freight(G)";
 		String actualString = freightCarUnderTest.toString();
@@ -143,9 +153,12 @@ public class RollingStockTests {
 	}
 	
 	/*LOCOMOTIVE*/
+	
 	/**
-	 * Create test for locomotive class
-	 * Start with valid gross weight and valid classification
+	 * Create Locomotive class in asgn2RollingStock that implement RollingStock.
+	 * Passing parameter grossWeight (Integer) and classification (string). 
+	 * 
+	 * note: in Locomotive class, passing grossWeight to abstract parameter
 	 * */
 	@Test
 	public void testCreateLocomotive() throws TrainException {
@@ -158,9 +171,13 @@ public class RollingStockTests {
 		
 	}
 	
-	/**
-	 * Create test for locomotive class
-	 * Start with valid classification input and invalid gross weight input
+	
+	 /**
+	 * Test with calling valid classification and invalid gross weight
+	 * Check whether TrainException in abstract class can be implemented in Locomotive.class
+	 * when calling invalid gross weight
+	 * 
+	 * @exception TrainException.class
 	 * */
 	@Test(expected = TrainException.class)
 	public void testCreateLocomotiveWithInvalidGrossWeight() throws TrainException
@@ -175,9 +192,10 @@ public class RollingStockTests {
 	
 
 	/**
-	 * Create test for locomotive class
-	 * Start with invalid specification input and valid Gross Weight
+	 * Test for Locomotive class with calling invalid specification and valid gross weight.
+	 * Create TrainException in Locomotive constructor when invalid specification is supplied.
 	 * 
+	 * @exception TrainException.class
 	 * */
 	@Test(expected = TrainException.class)
 	public void testCreateLocomotiveWithInvalidSpecification() throws TrainException
@@ -191,8 +209,11 @@ public class RollingStockTests {
 	}
 
 	/**
-	 * Create test for locomotive class
-	 * Start with invalid specification and valid gross weight
+	 * Test for Locomotive class with calling invalid specification one digit and valid gross weight.
+	 * check whether TrainException in Locomotive constructor is able to handle the supplied of one digit 
+	 * invalid specification 
+	 * 
+	 * @exception TrainException.class
 	 * */
 	@Test(expected = TrainException.class)
 	public void testCreateLocomotiveWithInvalidOneDigitSpecification() throws TrainException
@@ -205,25 +226,14 @@ public class RollingStockTests {
 				new asgn2RollingStock.Locomotive(validGrossWeight , invalidSpecification);
 	}
 
-	/**
-	 * Create test for locomotive class
-	 * Start with null specification input and valid gross weight
-	 * */
-	@Test(expected = TrainException.class)
-	public void testCreateLocomotiveWithInvalidNullSpecification() throws TrainException
-	{
-		String invalidNullSpecification = null;
-		Integer validGrossWeight = 5;
-		
-		@SuppressWarnings("unused")
-		asgn2RollingStock.RollingStock locomotiveWithInvalidNullSpecification = 
-			new asgn2RollingStock.FreightCar(validGrossWeight , invalidNullSpecification);
-	}
+	
 	
 	/**
-	 * Create test for locomotive class
-	 * Test to get locomotive power
-	 * Start with valid gross weight and classification input
+	 * Create power() method in Locomotive class with Integer data type
+	 * which return the power of locomotive.
+	 * Formula of power :
+	 * power = 100 x power_classification
+	 * power classification can be taken from substring(0,1) of classification parameter 
 	 * */
 	@Test
 	public void testGetLocomotivePower() throws TrainException {
@@ -239,9 +249,9 @@ public class RollingStockTests {
 	}
 	
 	/**
-	 * Create test for locomotive class
-	 * Test to override string to locomotive class
-	 * Start with gross weight for current string classification and expectedString
+	 * create toString() method in Locomotive class that return a string
+	 * representation of Locomotive 
+	 * Expected returned string = "Loco("+specification+")"
 	 * */
 	@Test
 	public void testLocomotiveToStringIsOverriden() throws TrainException {
@@ -256,9 +266,8 @@ public class RollingStockTests {
 	}
 	
 	/**
-	 * Create test for locomotive class
-	 * Test to get locomotive gross weight
-	 * Start with valid gross weight and classification
+	 * Create getGrossWeight() method in locomotive class with Integer data type
+	 * This method is an accessor of gross weight of locomotive class
 	 * 
 	 * */
 	@Test
@@ -273,9 +282,12 @@ public class RollingStockTests {
 	}
 	
 	/*PASSENGER CAR*/
+	
 	/**
-	 * Create test for passenger class
-	 * start with valid gross weight and number of seat input
+	 * Create Passenger class in asgn2RollingStock that implement RollingStock.
+	 * Passing parameter grossWeight (Integer) and numberOfSeats (Integer). 
+	 * 
+	 * note: in Locomotive class, passing grossWeight to abstract parameter
 	 * */
 	@Test
 	public void testCreatePassengerCar() throws TrainException {
@@ -289,8 +301,10 @@ public class RollingStockTests {
 	}
 	
 	/**
-	 * Create test for passenger class
-	 * Start with valid number of seat and invalid gross weight input
+	 * Check whether TrainException from abstract class is able to be implemented in 
+	 * PassengerCar class. Supplied invalid gross weight in PassengerCar.
+	 * 
+	 * @exception TrainException.class
 	 * */
 	@Test(expected = TrainException.class)
 	public void testCreatePassengerCarWithInvalidGrossWeight() throws TrainException
@@ -304,8 +318,9 @@ public class RollingStockTests {
 	}
 
 	/**
-	 * Create Test for passenger class
-	 * Start with invalid number of seat and valid gross weight input
+	 * Create TrainException in PassengerCar constructor when invalid negative gross weight is supplied.
+	 * 
+	 * @exception TrainException.class
 	 * */
 	@Test(expected = TrainException.class)
 	public void testCreatePassengerCarWithInvalidNumberOfSeats() throws TrainException
@@ -318,26 +333,12 @@ public class RollingStockTests {
 				new asgn2RollingStock.PassengerCar((Integer)validGrossWeight , (Integer)invalidNumberOfSeats);
 	}
 
-	/**
-	 * Create test for passenger class
-	 * Start with null number of seat and valid gross weight input
-	 * */
-	@Test(expected = NullPointerException.class)
-	public void testCreatePassengerCarWithInvalidNullSNumberOfSeats() throws TrainException
-	{
-		Integer invalidNullNumberOfSeats = null;
-		Integer validGrossWeight = 5;
-		
-		@SuppressWarnings("unused")
-		asgn2RollingStock.RollingStock passengerCarWithInvalidNullSpecification = 
-			new asgn2RollingStock.PassengerCar((Integer)validGrossWeight , (Integer)invalidNullNumberOfSeats);
-	}
 	
 	/**
-	 * Create test for passenger class 
-	 * Test for passenger board in passenger car
-	 * Start with number of passengers less than number of seats input
-	 * With valid gross weight input 
+	 * Create board() method in PassengerCar class which taken a parameter newPassengers in Integer data type.
+	 * This method should return the number of passengers in Integer data type 
+	 * which do not able to board due to the limited number of seats and return 0 if all passenger can board.
+	 * This test would supply newPassenger less than number of seats and expected return 0;
 	 * */
 	@Test
 	public void testPassengersBoardsToPassengerCar() throws TrainException
@@ -350,16 +351,17 @@ public class RollingStockTests {
 			new asgn2RollingStock.PassengerCar((Integer)grossWeight, (Integer)numberOfSeats);
 		
 		Integer expectedPeopleNotGetSeat = 0;
-		Integer peopleNotGetSeat = ((asgn2RollingStock.PassengerCar)passengerCarUnderTest).board((Integer) newPassengers);
+		Integer peopleNotGetSeat = ((asgn2RollingStock.PassengerCar)passengerCarUnderTest).board
+				((Integer) newPassengers);
 		
 		assertEquals("expected = " + expectedPeopleNotGetSeat.toString() + " but " + peopleNotGetSeat.toString(),
 				expectedPeopleNotGetSeat, peopleNotGetSeat);
 	}
 	
 	/**
-	 * Create test for passenger class 
-	 * Test for passenger board in passenger car
-	 * Start with number of passenger board more than number of seats
+	 * This is continuation of testPassengersBoardsToPassengerCar() above which supply newPassengers
+	 * more than numberOfSeats. Expected return numberOfSeats - newPassengers
+	 * 
 	 * */
 	@Test
 	public void testPassengerBoardMoreThanNumOfSeats() throws TrainException
@@ -378,10 +380,11 @@ public class RollingStockTests {
 	}
 	
 	/**
-	 * Create test for passenger class
-	 * Test for passenger board in passenger car
-	 * Start with valid input of gross weight, number of seat and passenger
-	 * Adding new passenger input in passenger car
+	 * Check the return of board() method in PassengerCar in the following condition:
+	 * - in first board, the PassengerCar taken newPassengers less than numberOfSeats
+	 * - in second board, the PassengerCar taken newPassengers again so totally number newPassengers
+	 *   more than numberOfSeats
+	 *   Expected return = total newPassengers - numberOfSeats   
 	 * */
 	@Test
 	public void testAddingPassengerAfterAnotherPassengerBoarding() throws TrainException
@@ -405,9 +408,8 @@ public class RollingStockTests {
 	}
 	
 	/**
-	 * Create test for passenger class
-	 * Test for number of seat in passenger car
-	 * Start with valid gross weight and expected number of seat input
+	 * Create numberOfSeats() method in passenger class which is an accessor  
+	 * for number of seats that is supplied when create Passenger Car instance
 	 * */
 	@Test
 	public void testNumberOfSeatsofPassengerCar() throws TrainException {
@@ -423,9 +425,8 @@ public class RollingStockTests {
 	}
 	
 	/**
-	 * Create test for passenger class
-	 * Test for number on board of passenger in passenger car
-	 * Start with valid gross weight, number of seat and passenger input
+	 * Create numberOnBoard() method in PassengerCar class which is an accessor  
+	 * for number passenger on board
 	 * */
 	@Test
 	public void testNumberOnBoardOfPassengerCar() throws TrainException
@@ -446,9 +447,9 @@ public class RollingStockTests {
 	}
 	
 	/**
-	 * Create test for passenger class
-	 * Test for passenger car toString
-	 * Start with valid gross weight, number of seat and passenger input
+	 * Create toString() method in passenger class that return a string to represent
+	 * the passenger car object.
+	 * 
 	 * */
 	@Test 
 	public void testPassengerCarToString() throws TrainException
@@ -468,10 +469,10 @@ public class RollingStockTests {
 	}
 	
 	/**
-	 * Create test for passenger class
-	 * Test for passenger departing from passenger car
-	 * Start with gross weight, number of seat and new passenger input
-	 * continue with number of departing passengers  
+	 * Create alight method in  passenger class that taken the departing passengers
+	 * as parameter. This method would decrease number on board.
+	 * Test this method after newPassengers board. Expected number on board equals
+	 * newpassenger on board minus departing passengers 
 	 * */
 	@Test
 	public void testPassengerCarDeparting() throws TrainException
@@ -484,8 +485,10 @@ public class RollingStockTests {
 		asgn2RollingStock.RollingStock passengerCarUnderTest =  
 			new asgn2RollingStock.PassengerCar((Integer)grossWeight, (Integer)numberOfSeats);
 		
+		//board
 		((asgn2RollingStock.PassengerCar)passengerCarUnderTest).board((Integer) newPassengers);
 		
+		//depart
 		((asgn2RollingStock.PassengerCar)passengerCarUnderTest).alight((Integer) departingPassengers );
 		
 		Integer expectedPassengersOnBoard = newPassengers - departingPassengers;
@@ -574,7 +577,8 @@ public class RollingStockTests {
 	 * Create test for passenger class
 	 * Test for passenger departing twice 
 	 * with total departing passenger is greater than on boarding passenger
-	 * Expecting TrainException
+	 * 
+	 * @exception TrainException
 	 * */
 	@Test(expected = TrainException.class)
 	public void testPassengerCarAlightWithTotalDepartingPassengersBiggerThanNumOnBoard() throws TrainException

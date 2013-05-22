@@ -6,8 +6,13 @@ import asgn2Exceptions.TrainException;
 import asgn2RollingStock.*;
 
 	
+/**
+ * @author Lalu Fahany Yazikri
+ * 
+ * */
 public class TrainModel extends Observable {
-
+	
+	
 	private static DepartingTrain train;
 	
 	public enum CarriageTypes{Locomotive, PassengerCar, FreightCar};
