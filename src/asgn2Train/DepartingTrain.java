@@ -34,7 +34,7 @@ public class DepartingTrain extends Object {
 	 * */
 	public DepartingTrain(){
 		train = new ArrayList<RollingStock>();
-		nextCarriageNumber = 1;
+		nextCarriageNumber = 0;
 	}
 	
 	/**
@@ -163,14 +163,12 @@ public class DepartingTrain extends Object {
 	public RollingStock nextCarriage() {
 		RollingStock nextCarriage = null;
 		
-		if(canNextCarriageGetted()){
+		if(possibleGetNextCrg()){
 			nextCarriage = train.get(nextCarriageNumber);
 		}
 		
-		int maxCarriageNumber = train.size()-1;
-		if(this.nextCarriageNumber < maxCarriageNumber){
-			this.nextCarriageNumber++;
-		}
+		//int maxCarriageNumber = train.size()-1;
+		this.nextCarriageNumber++;
 		
 		return nextCarriage;
 	}
@@ -178,7 +176,7 @@ public class DepartingTrain extends Object {
 	/**
 	 * 
 	 * */
-	private boolean canNextCarriageGetted(){
+	private boolean possibleGetNextCrg(){
 		return this.nextCarriageNumber < train.size();
 	}
 	
@@ -248,12 +246,17 @@ public class DepartingTrain extends Object {
 	 * @return : the first carriage in the train, or null if there are no carriages
 	 * */
 	public RollingStock firstCarriage() {
+		final int INDEX_AFTER_LOCO = 1;
+		
+		RollingStock firstCarriage = null;
+		
 		if(train.size() > 0){
-			return train.get(0);
+			nextCarriageNumber = INDEX_AFTER_LOCO;
+			firstCarriage =  train.get(0);
 		}
-		else {
-			return null;
-		}
+		
+		return firstCarriage;
+		
 	}
 
 	/**

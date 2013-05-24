@@ -116,7 +116,7 @@ public class TrainTests {
 	 * 
 	 * */
 	@Test
-	public void testNextCarriage() throws TrainException
+	public void testNextCarriageAfterFirstCarriage() throws TrainException
 	{
 		asgn2Train.DepartingTrain train = new asgn2Train.DepartingTrain();
 		
@@ -130,13 +130,79 @@ public class TrainTests {
 		
 		Integer freightCarGrossWeight = 5;
 		String freightCarGoodsType = "R";
-		asgn2RollingStock.RollingStock freightCar = new asgn2RollingStock.FreightCar( freightCarGrossWeight, freightCarGoodsType);
+		asgn2RollingStock.RollingStock freightCar = 
+				new asgn2RollingStock.FreightCar( freightCarGrossWeight, freightCarGoodsType);
 		train.addCarriage(freightCar);
 		
+		@SuppressWarnings("unused")
+		RollingStock firstCarriage = train.firstCarriage();
 		RollingStock nextCarriage = train.nextCarriage();
 		assertTrue(nextCarriage instanceof FreightCar);
 	}
 	
+	/**
+	 * Create test for the next carriage
+	 * Start with adding locomotive valid input
+	 * continue with another carriage valid input
+	 * 
+	 * */
+	@Test
+	public void testCallNextCarriageTwice() throws TrainException
+	{
+		asgn2Train.DepartingTrain train = new asgn2Train.DepartingTrain();
+		
+		//add locomotive
+		Integer grossWeight = 5;
+		String classification = "4E";
+		asgn2RollingStock.RollingStock newCarriage = new asgn2RollingStock.Locomotive(grossWeight, classification);
+		train.addCarriage((asgn2RollingStock.RollingStock)newCarriage);
+		
+		//add another carriage
+		
+		Integer freightCarGrossWeight = 5;
+		String freightCarGoodsType = "R";
+		asgn2RollingStock.RollingStock freightCar = 
+				new asgn2RollingStock.FreightCar( freightCarGrossWeight, freightCarGoodsType);
+		train.addCarriage(freightCar);
+		
+		@SuppressWarnings("unused")
+		RollingStock firstCarriage = train.nextCarriage();
+		RollingStock nextCarriage = train.nextCarriage();
+		assertTrue(nextCarriage instanceof FreightCar);
+	}
+	
+	/**
+	 * Create test for the next carriage
+	 * Start with adding locomotive valid input
+	 * continue with another carriage valid input
+	 * 
+	 * */
+	@Test
+	public void testCallNextCarriageUntilReturnNull() throws TrainException
+	{
+		asgn2Train.DepartingTrain train = new asgn2Train.DepartingTrain();
+		
+		//add locomotive
+		Integer grossWeight = 5;
+		String classification = "4E";
+		asgn2RollingStock.RollingStock newCarriage = new asgn2RollingStock.Locomotive(grossWeight, classification);
+		train.addCarriage((asgn2RollingStock.RollingStock)newCarriage);
+		
+		//add another carriage
+		
+		Integer freightCarGrossWeight = 5;
+		String freightCarGoodsType = "R";
+		asgn2RollingStock.RollingStock freightCar = 
+				new asgn2RollingStock.FreightCar( freightCarGrossWeight, freightCarGoodsType);
+		train.addCarriage(freightCar);
+		
+		@SuppressWarnings("unused")
+		RollingStock firstCarriage = train.nextCarriage();
+		@SuppressWarnings("unused")
+		RollingStock scndCarriage = train.nextCarriage();
+		RollingStock thirdCarriage = train.nextCarriage();
+		assertNull(thirdCarriage);
+	}
 	
 	/**
 	 * Create test for passenger board on departing train

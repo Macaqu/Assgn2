@@ -10,17 +10,19 @@ import asgn2RollingStock.*;
  * @author Lalu Fahany Yazikri
  * 
  * */
-public class TrainModel extends Observable {
+public class TrainModel /*extends Observable*/ {
 	
 	
 	private static DepartingTrain train;
 	
 	public enum CarriageTypes{Locomotive, PassengerCar, FreightCar};
 	
+	
 	public TrainModel() {
 		train = new DepartingTrain();
 
 	}
+	
 	
 	private static String getCarriageName(CarriageTypes car){
 		String carName = "";
@@ -34,15 +36,110 @@ public class TrainModel extends Observable {
 		return carName;
 	}
 	
+	
+	public double getGrossWeight(){
+		double grossWeight = 0;
+		RollingStock carriage = train.firstCarriage();
+		
+		if(carriage != null){
+			grossWeight += carriage.getGrossWeight();
+		}
+		
+		while(carriage != null){
+			carriage = train.nextCarriage();
+			if(carriage == null){
+				break;
+			}
+			grossWeight += carriage.getGrossWeight();
+		}
+		
+		return grossWeight;
+	}
+	
+	private String newline = "\n";
+	
+	/**
+	 * Return a string for driver information 
+	 * */
+	public String getDriverInfo(){
+		double grossWeight = getGrossWeight();
+		String info = "====== INFO FOR DRIVER =====" + newline + newline;
+		info += "train configuration = " + getConfigurationName() + newline;
+		info += "total power = " + getPower().toString() + newline;
+		info += "total weight = " + grossWeight + " tonnes" + newline; 
+		info += " ------------------------------------ -" + newline;
+		
+		double allowedAddWeight = getPower() - grossWeight;
+		if(allowedAddWeight < 0){
+			info += "WARNING!!! OVERLOADED - CANNOT MOVE" + allowedAddWeight 
+					+ " tonnes" + newline;
+		}
+		else {
+			info += "allowed additional grossweight = " + allowedAddWeight + 
+					" tonnes" + newline;
+		}
+		
+		Integer numOnBoard = getNumberOnBoard(); 
+		if(numOnBoard != 0){
+			info += "WARNING !!! adding a carriage is not allowed because there are" +
+					"passenger on board" + " (" + numOnBoard.toString() + " people)" + 
+					newline;
+		}
+		
+		info += "===============" + newline;
+		return info;
+	}
+	
+	public boolean trainCanMove(){
+		return train.trainCanMove();
+	}
+	
+	public String getLastCarriageString(){
+		RollingStock carriage = getLastCarriage();
+		return carriage.toString();
+	}
+	
+	public CarriageTypes getLastCarriageType(){
+		RollingStock carriage = getLastCarriage();
+		CarriageTypes type = null;
+		if(carriage instanceof Locomotive){
+			type = CarriageTypes.Locomotive;
+		} 
+		else if(carriage instanceof FreightCar){
+			type = CarriageTypes.FreightCar;
+		}
+		if(carriage instanceof PassengerCar){
+			type = CarriageTypes.PassengerCar;
+		}
+		
+		return type;
+	}
+	/**
+	 * Return a string for conductor's information
+	 * */
+	public String getConductorInfo(){
+		String info = "=========== INFO FOR CONDUCTOR ======" + newline 
+				+ newline;
+		
+		info += "Total Number of Seats = " + 
+				getNumberOfSeats().toString() + newline;
+		info += "Total Passengers = " + getNumberOnBoard().toString() + newline;
+		
+		Integer allowedAddPass = getNumberOfSeats() - getNumberOnBoard();
+		info += "Allowed additional passengers = " + allowedAddPass.toString() + 
+				" people" + newline;
+		info += "=============" + newline;
+		return info;
+	}
+	
 	public String[] getCarriageType(){
 		String[] carriageToChoose = null; 
-		RollingStock firstCar = train.firstCarriage();
-		RollingStock nextCar = train.nextCarriage();
-		if(firstCar == null){
+		RollingStock lastCarriage = getLastCarriage();
+		if(lastCarriage == null){
 			carriageToChoose = new String[]{getCarriageName(CarriageTypes.Locomotive)};
 		}
 		else{
-			if( nextCar instanceof FreightCar){
+			if( lastCarriage instanceof FreightCar){
 				carriageToChoose = new String[]{getCarriageName(CarriageTypes.FreightCar)};
 			}
 			else{
@@ -69,18 +166,37 @@ public class TrainModel extends Observable {
 		return locoPower;
 	}
 	
+	public RollingStock getLastCarriage(){
+		RollingStock currentCarriage = train.firstCarriage();
+		RollingStock lastCarriage = null;
+		while(currentCarriage != null){
+			lastCarriage = currentCarriage;
+			currentCarriage = train.nextCarriage();
+		}
+		return lastCarriage;
+	}
+	
 	public void addLocomotive(Integer grossWeight, String classification) throws TrainException{
 		RollingStock locomotive = new Locomotive(grossWeight, classification);
 		train.addCarriage(locomotive);
-		setChanged();
-		notifyObservers();
+		//setChanged();
+		//notifyObservers();
 	}
 	
 	public void addPassengerCar(Integer grossWeight, Integer numberOfSeats) throws TrainException{
 		RollingStock passengerCar = new PassengerCar(grossWeight, numberOfSeats);
 		train.addCarriage(passengerCar);
-		setChanged();
-		notifyObservers();
+		//setChanged();
+		//notifyObservers();
+	}
+	
+	
+	
+	public void addFreightCar(Integer grossWeight, String goodsType) throws TrainException{
+		RollingStock freightCar = new FreightCar(grossWeight, goodsType);
+		train.addCarriage(freightCar);
+		//setChanged();
+		//notifyObservers(new String("add Freight Car"));
 	}
 	
 	public String[] getFreightCarGoodsType(){
@@ -89,12 +205,6 @@ public class TrainModel extends Observable {
 		return goodsTYpeToChoose;
 	}
 	
-	public void addFreightCar(Integer grossWeight, String goodsType) throws TrainException{
-		RollingStock freightCar = new FreightCar(grossWeight, goodsType);
-		train.addCarriage(freightCar);
-		setChanged();
-		notifyObservers();
-	}
 	
 	public String getConfigurationName(){
 		return train.toString();
@@ -102,14 +212,14 @@ public class TrainModel extends Observable {
 	
 	public void removeCarriage() throws TrainException{
 		train.removeCarriage();
-		setChanged();
-		notifyObservers();
+		//setChanged();
+		//notifyObservers();
 	}
 	
 	public Integer board(Integer passenger) throws TrainException{
 		Integer psgNotDepart = train.board(passenger);
-		setChanged();
-		notifyObservers();
+		//setChanged();
+		//notifyObservers();
 		return psgNotDepart;
 	}
 	

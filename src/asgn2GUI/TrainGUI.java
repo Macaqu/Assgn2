@@ -5,8 +5,12 @@ import java.util.Observable;
 import java.util.Observer;
 import javax.swing.*;
 
+import asgn2GUI.TrainModel.CarriageTypes;
+
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.Rectangle2D;
+
 
 
 /**
@@ -35,6 +39,7 @@ public class TrainGUI extends JFrame implements Observer {
 	private JPanel pnlConductorBtnTwo;
 	private JPanel pnlConductorBtnThree;
 	
+	private JPanel testing;
 	//textarea
 	private JTextArea displayDriverInfo;
 	private JTextArea displayConductorInfo;
@@ -112,7 +117,6 @@ public class TrainGUI extends JFrame implements Observer {
 		displayConductorInfo.update(displayConductorInfo.getGraphics());
 		displayConductorInfo.setCaretPosition(displayConductorInfo.getDocument().getLength());
 	}
-
 	
 	
 	/**
@@ -132,6 +136,7 @@ public class TrainGUI extends JFrame implements Observer {
 		btnBoard.setEnabled(false);
 		
 		this.txtNumPassengers = new JTextField();
+		
 		this.txtNumPassengers.setPreferredSize(new Dimension(20, 30));
 		this.pnlConductorBtnOne.setLayout(new BorderLayout());
 		this.pnlConductorBtnOne.add(lblPassenger, BorderLayout.WEST);
@@ -148,6 +153,8 @@ public class TrainGUI extends JFrame implements Observer {
 		btnReset = new JButton("Reset");
 		btnReset.setPreferredSize(new Dimension(100, 30));
 		this.pnlConductorBtnThree.add(btnReset, BorderLayout.SOUTH);
+		
+		
 	}
 
 	/**
@@ -188,10 +195,13 @@ public class TrainGUI extends JFrame implements Observer {
 	 * */
 	private void settingLayout() {
 		pnlImages = new JPanel();
-		pnlImages.setBackground(Color.blue);
-		//pnlImages.setPreferredSize(new Dimension(500, 150));
+		pnlImages.setBackground(Color.white);
+		pnlImages.setPreferredSize(new Dimension(950, 150));
 		
-		scrlImages = new JScrollPane();
+		testing = new JPanel();
+
+		scrlImages = new JScrollPane(testing);
+		testing.add(new JPanel());
 		scrlImages.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		scrlImages.setPreferredSize(new Dimension(950, 150));
 		pnlImages.add(scrlImages);
@@ -241,10 +251,29 @@ public class TrainGUI extends JFrame implements Observer {
 		pnlConductorButton.add(pnlConductorBtnTwo);
 		pnlConductorButton.add(pnlConductorBtnThree);
 		
-		//lytConductorBtn = new GridLayout(3,3);
-		//pnlConductorButton.setLayout(lytConductorBtn);
+		//addCarriage(TrainModel.CarriageTypes.Locomotive, "Jancuk");
 	}
-
+	
+	
+	protected void addCarriageImage(){
+		
+		TrainModel.CarriageTypes type = TrainModel.CarriageTypes.Locomotive;
+		String name = "Loco";
+		CarriageImage image = new CarriageImage(name, type); 
+		testing.add(image);
+		testing.repaint();
+		testing.revalidate();
+		
+	}
+	/*
+	public void addCarriageImage(CarriageImage imageString string){*/
+		/*testing.add(image);
+		repaint();*/
+		/*
+		JLabel label  = new JLabel(string);
+		testing.add(label);
+	}
+	*/
 	/**
 	 * 
 	 * */
@@ -256,13 +285,7 @@ public class TrainGUI extends JFrame implements Observer {
 		
 	}
 	
-	/**
-	 * 
-	 * */
-	@Override
-	public void update(Observable arg0, Object arg1) {
-		
-	}
+	
 
 	/**
 	 * 
@@ -419,25 +442,96 @@ public class TrainGUI extends JFrame implements Observer {
 	public void setTxtNumOfSeats(Integer numOfSeats){
 		this.txtNumOfSeats.setText(numOfSeats.toString());
 	}
+
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		
+		//	addCarriageImage();
+		
+	}
+	
 	
 }
 
-class CarriageImage extends JComponent {
+
+
+class CarriageImage extends JPanel  {
 	
-	public CarriageImage(TrainModel.CarriageTypes type){
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private String carriageName;
+	
+	Color carriageColor;
+	
+	public CarriageImage(){
 		
-		Color color;
-		switch(type){
-		case Locomotive : color = Color.RED;
-		case PassengerCar : color = Color.CYAN;
-		case FreightCar : color = Color.BLUE;
+	}
+
+	
+	public CarriageImage(String carriageName, TrainModel.CarriageTypes carriageType){
+		this.carriageName = carriageName;
+		setColor(carriageType);
+	}
+
+
+    private void setColor(CarriageTypes carriageType) {
+		if(carriageType == CarriageTypes.Locomotive){
+			carriageColor = Color.magenta;
 		}
-		
-		
+		else if(carriageType == CarriageTypes.PassengerCar){
+			carriageColor = Color.GREEN;
+		}
+		else {
+			carriageColor = Color.yellow;
+		}
 	}
+
+
+	@Override
+    public Dimension getPreferredSize() {
+        return new Dimension(150, 100);
+    }
 	
-	public void paint(Graphics g){
-		
-	}
-	
-}
+    @Override
+    public void paint(Graphics g) {
+        /*
+    	String string = "Testing";
+    	Graphics2D g2d = (Graphics2D) g;
+        FontMetrics fm = g2d.getFontMetrics();
+        Rectangle2D r = fm.getStringBounds(string, g2d);
+        int x = (this.getWidth() - (int) r.getWidth()) / 2;
+        int y = (this.getHeight() - (int) r.getHeight()) / 2 + fm.getAscent();
+        g.drawString(string, x, y);
+        //g.setColor(Color.red);
+        int margin = 10;
+        Dimension dim = getSize();
+        g.fillRect(margin, margin, dim.width - margin * 2, dim.height - margin * 2);
+    	*/
+        
+    	//int margin = 10;
+        //Dimension dim = getSize();
+        super.paintComponent(g);
+        Rectangle b = new Rectangle();
+        Dimension dim = getPreferredSize();
+        b.setSize(dim);
+        
+        Font font = new Font("Arial", Font.BOLD, 20);
+
+        g.setFont(font);
+        g.setColor(carriageColor);
+        g.fill3DRect(b.x, b.y, b.width, b.height, false);
+       // g.fillOval(b.x, b.y, b.width, b.height);
+        g.setColor(Color.black);
+        //g.drawString("Testing", 10, 10 );
+       // g.drawString("1", b.x + b.width/2 , b.y+ b.height/2);
+        FontMetrics fm = g.getFontMetrics();
+        Rectangle2D rect = fm.getStringBounds("1", g);
+        g.drawString(carriageName, (int) (b.x + b.width/2 - rect.getWidth()/2),
+                          (int) (b.y + b.height/2 + rect.getHeight()/2));
+    	
+    }	
+    
+    }
