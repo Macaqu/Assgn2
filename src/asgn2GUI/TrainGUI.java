@@ -1,6 +1,7 @@
 package asgn2GUI;
 
 
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.*;
@@ -16,7 +17,7 @@ import java.awt.geom.Rectangle2D;
 /**
  * @author Lalu Fahany Yazikri
  */
-public class TrainGUI extends JFrame implements Observer {
+public class TrainGUI extends JFrame{
 
 	private static final long serialVersionUID = -5269332274129183251L;
 
@@ -26,32 +27,21 @@ public class TrainGUI extends JFrame implements Observer {
 	
 	//panel
 	private JPanel pnlImages;
-	
 	private JPanel pnlDriver;
 	private JPanel pnlDriverInfo;
 	private JPanel pnlDriverButton;
-	
 	private JPanel pnlConductor;
 	private JPanel pnlConductorInfo;
 	private JPanel pnlConductorButton;
+	private JPanel pnlReset;
+	private JPanel pnlShowImage;
+	private JPanel pnlImgTitle;
 	
-	private JPanel pnlConductorBtnOne;
-	private JPanel pnlConductorBtnTwo;
-	private JPanel pnlConductorBtnThree;
 	
-	private JPanel testing;
 	//textarea
 	private JTextArea displayDriverInfo;
 	private JTextArea displayConductorInfo;
 	
-	//label
-	private JLabel lblDriverPnl;
-	private JLabel lblConductorPnl;
-	
-	private JLabel lblPassenger;
-	private JLabel lblNumSeats;
-
-
 	//buttons
 	private JButton btnAddCarriage;
 	private JButton btnRemoveCarriage;
@@ -60,14 +50,19 @@ public class TrainGUI extends JFrame implements Observer {
 	
 	//TextField
 	private JTextField txtNumPassengers;
-	private JTextField txtNumOfSeats;
-
-	//Scroll Pane
-	private JScrollPane scrlImages;
+	
+	private ArrayList<CarriageImage> listImage;
+	
+	private GridBagLayout layout;
+	private GridBagConstraints c;
+	
+	private String newline = "\n";
 	
 	public TrainGUI(){
 		super("Train Simulation");
 		super.setDefaultLookAndFeelDecorated(true);
+		c = new GridBagConstraints();
+		listImage =  new ArrayList<CarriageImage>();
 		initComponents();
 	}
 
@@ -86,19 +81,15 @@ public class TrainGUI extends JFrame implements Observer {
 	private void initComponents() {
 		
 		setSize(WIDTH, HEIGHT);
-		setLayout(new BorderLayout());
-		setBackground(Color.BLACK);
 		
 		settingLayout();
 		
 		settingTextArea();
 		
 		settingButton();
-		
-		
 	}
 
-	private String newline = "\n";
+	
 	
 	/**
 	 * 
@@ -115,46 +106,34 @@ public class TrainGUI extends JFrame implements Observer {
 	public void updateConductorInfo(String message){
 		this.displayConductorInfo.append(message + newline);
 		displayConductorInfo.update(displayConductorInfo.getGraphics());
-		displayConductorInfo.setCaretPosition(displayConductorInfo.getDocument().getLength());
+		displayConductorInfo.setCaretPosition(displayConductorInfo.getDocument()
+				.getLength());
 	}
+	
 	
 	
 	/**
 	 * 
 	 * */
 	private void settingButton() {
-		this.btnAddCarriage = new JButton("Add A Carriage");
-		btnAddCarriage.setPreferredSize(new Dimension(400, 30));
-		this.btnRemoveCarriage = new JButton("Remove A Carriage");
-		btnRemoveCarriage.setPreferredSize(new Dimension(400, 30));
-		this.pnlDriverButton.add(btnAddCarriage, BorderLayout.PAGE_START);
-		this.pnlDriverButton.add(btnRemoveCarriage, BorderLayout.PAGE_END);
 		
-		this.lblPassenger = new JLabel("Passenger   ");
-		this.btnBoard = new JButton("Board");
-		btnBoard.setPreferredSize(new Dimension(100, 30));
+		Dimension defaultDim = new Dimension(200, 40);
+		
+		/*Create Button*/
+		btnAddCarriage = createButton("Add A Carriage", defaultDim);
+		
+		btnRemoveCarriage = createButton("Remove Carriage",defaultDim);
+		
+		btnBoard = createButton("Board", defaultDim);
 		btnBoard.setEnabled(false);
 		
-		this.txtNumPassengers = new JTextField();
+		btnReset = createButton("Reset", defaultDim);
 		
-		this.txtNumPassengers.setPreferredSize(new Dimension(20, 30));
-		this.pnlConductorBtnOne.setLayout(new BorderLayout());
-		this.pnlConductorBtnOne.add(lblPassenger, BorderLayout.WEST);
-		this.pnlConductorBtnOne.add(txtNumPassengers, BorderLayout.CENTER);
-		this.lblNumSeats = new JLabel("Number of Seats   ");
-		this.txtNumOfSeats = new JTextField();
-		this.pnlConductorBtnTwo.setLayout(new BorderLayout());
-		this.pnlConductorBtnTwo.add(lblNumSeats, BorderLayout.WEST);
-		this.pnlConductorBtnTwo.add(txtNumOfSeats, BorderLayout.CENTER);
-		
-		this.pnlConductorBtnThree.setLayout(new BorderLayout());
-		this.pnlConductorBtnThree.add(btnBoard, BorderLayout.NORTH);
-		
-		btnReset = new JButton("Reset");
-		btnReset.setPreferredSize(new Dimension(100, 30));
-		this.pnlConductorBtnThree.add(btnReset, BorderLayout.SOUTH);
-		
-		
+		/*Set button into layout*/	
+		pnlDriverButton.add(btnAddCarriage);
+		pnlDriverButton.add(btnRemoveCarriage);
+		pnlConductorButton.add(btnBoard);
+		pnlReset.add(btnReset);
 	}
 
 	/**
@@ -162,118 +141,187 @@ public class TrainGUI extends JFrame implements Observer {
 	 * */
 	private void settingTextArea() {
 		
-		lblDriverPnl = new JLabel("Driver");
-		lblDriverPnl.setFont(new Font("Arial", Font.BOLD, 16));
-		pnlDriverInfo.add(lblDriverPnl, BorderLayout.LINE_START);
+		//Driver
+		displayDriverInfo = createTextArea();
+		JScrollPane scrlDriver = createScrollPane(new Dimension(450, 200), true, displayDriverInfo);
+		pnlDriverInfo.add(scrlDriver);
 		
+		//Conductor
+		displayConductorInfo = createTextArea();
+		JScrollPane scrlConductor = createScrollPane(new Dimension(450, 200), true, displayConductorInfo);
+		pnlConductorInfo.add(scrlConductor, BorderLayout.SOUTH);
+	
+		//InfoGraph
+		//pnlImages.setLayout(new BorderLayout());
+		JLabel lblImages = new JLabel("Info Graphic");
+		pnlImgTitle.add(lblImages );
 		
-		displayDriverInfo = new JTextArea();
-		displayDriverInfo.setEditable(false);
-		displayDriverInfo.setLineWrap(true);
+		JScrollPane scrlImages = createScrollPane(new Dimension(950, 150), false, pnlShowImage);
 		
-		JScrollPane scrlDriver = new JScrollPane(displayDriverInfo);
-		scrlDriver.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		scrlDriver.setPreferredSize(new Dimension(450, 200));
-		pnlDriverInfo.add(scrlDriver, BorderLayout.LINE_END);
+		pnlImages.add(scrlImages, BorderLayout.CENTER);
+	}
+	
+	
+	private JScrollPane createScrollPane(Dimension dimension, boolean isVertical , Component component){
+		JScrollPane scroll =  new JScrollPane(component);
+		scroll.setPreferredSize(dimension);
 		
+		if(isVertical){
+			scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		}
+		else{
+			scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		}
 		
-		lblConductorPnl = new JLabel("Conductor");
-		lblConductorPnl.setFont(new Font("Arial", Font.BOLD, 16));
-		pnlConductorInfo.add(lblConductorPnl, BorderLayout.LINE_START);
+		return scroll;
+	}
+	
+	
+	private JTextArea createTextArea(){
 		
-		displayConductorInfo = new JTextArea();
-		displayConductorInfo.setEditable(false);
+		//create textarea
+		JTextArea textArea = new JTextArea();
+		textArea.setEditable(false);
+		textArea.setLineWrap(true);
 		
-		JScrollPane scrlConductor = new JScrollPane(displayConductorInfo);
-		scrlConductor.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		scrlConductor.setPreferredSize(new Dimension(450, 200));
-		pnlConductorInfo.add(scrlConductor, BorderLayout.LINE_END);
+		return textArea;
 	}
 
+	
 	/**
 	 * 
 	 * */
 	private void settingLayout() {
-		pnlImages = new JPanel();
-		pnlImages.setBackground(Color.white);
-		pnlImages.setPreferredSize(new Dimension(950, 150));
-		
-		testing = new JPanel();
+		layout = new GridBagLayout();
 
-		scrlImages = new JScrollPane(testing);
-		testing.add(new JPanel());
-		scrlImages.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		scrlImages.setPreferredSize(new Dimension(950, 150));
-		pnlImages.add(scrlImages);
+		c = new GridBagConstraints();
+		Color defaultClr = Color.LIGHT_GRAY;
+		
+		JPanel panel = new JPanel(layout);
+		
+		/*main panel*/
+		pnlImages = createPanel(defaultClr);
+		pnlDriver = createPanel(defaultClr);
+		pnlConductor = createPanel(defaultClr);
+		pnlReset = createPanel(defaultClr);
+
+		/*arrange the panel*/
+		pnlImgTitle = createPanel(defaultClr);
+	
+		c.weightx = 100;
+		c.weighty = 100;
+		c.gridx = 0;
+		c.gridy = 0;
+		c.gridwidth = 2;
+		c.gridheight = 1;
+		c.ipady = 0;
+		c.ipadx = 10;
+		c.anchor = GridBagConstraints.NORTH;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		panel.add(pnlImages, c);
+		
+		c.fill = GridBagConstraints.CENTER;
+		c.gridx = 0;
+		c.gridy = 1;
+		c.gridwidth = 2;
+		c.gridheight = 1;
+		
+		c.anchor = GridBagConstraints.CENTER;
+		c.ipady = 15;
+		c.ipadx = 30;
+		c.gridx = 0;
+		c.anchor = GridBagConstraints.WEST;
+		panel.add(pnlDriver,c);
+		c.anchor= GridBagConstraints.EAST;
+		panel.add(pnlConductor,c);
+		
+		c.gridx = 0;
+		c.gridy = 3;
+		c.weightx = 100;
+		c.gridheight = 1;
+		c.ipadx = 0;
+		c.anchor = GridBagConstraints.SOUTH;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		panel.add(pnlReset, c);
+		
+		getContentPane().add(panel);
+		
+		/*sub panel*/
+		
+		//images panel 
+		pnlImages.setLayout(new BorderLayout());
+		pnlImages.add(pnlImgTitle, BorderLayout.NORTH);
+		pnlShowImage = new JPanel(); //add into scrollpane of image
+		
+		JPanel pnlFootyImage = createPanel(defaultClr);
+		pnlImages.add(pnlFootyImage, BorderLayout.SOUTH);
+		
+		//driver panel 
+		JLabel lblDriver = new JLabel("Driver");
+		JPanel pnlLblDriver = createPanel(defaultClr);
+		pnlLblDriver.add(lblDriver);
+		
+		pnlDriverInfo = createPanel(defaultClr);
+		pnlDriverButton = createPanel(defaultClr);
+		
+		pnlDriver.setLayout(new BorderLayout());
+		pnlDriver.add(pnlLblDriver, BorderLayout.NORTH);
+		pnlDriver.add(pnlDriverInfo, BorderLayout.CENTER);
+		pnlDriver.add(pnlDriverButton, BorderLayout.SOUTH);
+		
+		//conductor Panel
+		JLabel lblConductor = new JLabel("Conductor");
+		JPanel pnlLblConductor = createPanel(defaultClr);
+		pnlLblConductor.add(lblConductor);
 		
 		
-		getContentPane().add(pnlImages, BorderLayout.PAGE_START);
+		pnlConductorInfo = createPanel(defaultClr);
+		pnlConductorButton = createPanel(defaultClr);
 		
-		pnlDriver = new JPanel();
-		pnlDriver.setBackground(Color.yellow);
-		pnlDriver.setPreferredSize(new Dimension(500, 450));
-		getContentPane().add(pnlDriver, BorderLayout.LINE_START);
-		
-		pnlDriverInfo = new JPanel();
-		pnlDriverInfo.setBackground(Color.darkGray);
-		pnlDriverInfo.setPreferredSize(new Dimension(500, 250));
-		pnlDriver.add(pnlDriverInfo, BorderLayout.PAGE_START);
-		
-		pnlDriverButton = new JPanel();
-		pnlDriverButton.setBackground(Color.LIGHT_GRAY);
-		pnlDriverButton.setPreferredSize(new Dimension(500, 200));
-		pnlDriver.add(pnlDriverButton, BorderLayout.PAGE_END);
-		
-		pnlConductor = new JPanel();
-		pnlConductor.setBackground(Color.CYAN);
-		pnlConductor.setPreferredSize(new Dimension(500, 450));
-		getContentPane().add(pnlConductor, BorderLayout.LINE_END);
-		
-		pnlConductorInfo = new JPanel();
-		pnlConductorInfo.setBackground(Color.YELLOW);
-		pnlConductorInfo.setPreferredSize(new Dimension(500, 250));
-		pnlConductor.add(pnlConductorInfo, BorderLayout.PAGE_START);
-		
-		pnlConductorButton = new JPanel();
-		pnlConductorButton.setBackground(Color.green);
-		pnlConductorButton.setPreferredSize(new Dimension(500, 200));
-		pnlConductor.add(pnlConductorButton, BorderLayout.PAGE_END);
-		
-		
-		this.pnlConductorBtnOne = new JPanel();
-		pnlConductorBtnOne.setPreferredSize(new Dimension(200, 30));
-		this.pnlConductorBtnTwo = new JPanel();
-		pnlConductorBtnTwo.setPreferredSize(new Dimension(200, 30));
-		this.pnlConductorBtnThree = new JPanel();
-		pnlConductorBtnThree.setPreferredSize(new Dimension(150, 100));
-		
-		pnlConductorButton.add(pnlConductorBtnOne);
-		pnlConductorButton.add(pnlConductorBtnTwo);
-		pnlConductorButton.add(pnlConductorBtnThree);
-		
-		//addCarriage(TrainModel.CarriageTypes.Locomotive, "Jancuk");
+		pnlConductor.setLayout(new BorderLayout());
+		pnlConductor.add(pnlLblConductor, BorderLayout.NORTH);
+		pnlConductor.add(pnlConductorInfo, BorderLayout.CENTER);
+		pnlConductor.add(pnlConductorButton, BorderLayout.SOUTH);
+		revalidate();
+		repaint();
+	}
+
+	
+	private JPanel createPanel(Color background){
+		JPanel panel = new JPanel();
+		panel.setBackground(background);
+		return panel;
+	}
+	
+	private JButton createButton(String buttonName, Dimension dimension){
+		JButton newButton = new JButton(buttonName);
+		newButton.setVisible(true);
+		newButton.setPreferredSize(dimension);
+		return newButton;
+	}
+	
+	protected void removeImage(){
+		CarriageImage image = listImage.get(listImage.size()-1);
+		listImage.remove(image);
+		pnlShowImage.remove(image);
+		pnlShowImage.repaint();
+		pnlShowImage.revalidate();
 	}
 	
 	
-	protected void addCarriageImage(){
+	
+	protected void addCarriageImage(String name, TrainModel.CarriageTypes type){
 		
-		TrainModel.CarriageTypes type = TrainModel.CarriageTypes.Locomotive;
-		String name = "Loco";
 		CarriageImage image = new CarriageImage(name, type); 
-		testing.add(image);
-		testing.repaint();
-		testing.revalidate();
+		
+		listImage.add(image);
+		pnlShowImage.add(image);
+		
+		pnlShowImage.repaint();
+		pnlShowImage.revalidate();
 		
 	}
-	/*
-	public void addCarriageImage(CarriageImage imageString string){*/
-		/*testing.add(image);
-		repaint();*/
-		/*
-		JLabel label  = new JLabel(string);
-		testing.add(label);
-	}
-	*/
+	
 	/**
 	 * 
 	 * */
@@ -291,7 +339,8 @@ public class TrainGUI extends JFrame implements Observer {
 	 * 
 	 * */
 	protected void showErrorMessage(String errorMsg){
-		JOptionPane.showConfirmDialog(null, errorMsg, "Setting Locomotive", JOptionPane.CLOSED_OPTION);
+		JOptionPane.showConfirmDialog(null, errorMsg, "Setting Locomotive",
+				JOptionPane.CLOSED_OPTION);
 		
 	}
 	
@@ -325,6 +374,7 @@ public class TrainGUI extends JFrame implements Observer {
 	protected Object[] settingLocomotive(String[] engineType, String[] enginePower){
 		JTextField txtGrossWeight = new JTextField();
 		
+		//setting combo boxes
 		JComboBox<Object> cmbEngineType = new JComboBox<Object>(engineType);
 		JComboBox<Object> cmbEnginePower = new JComboBox<Object>(enginePower);
 		cmbEngineType.setSelectedIndex(-1);
@@ -335,7 +385,8 @@ public class TrainGUI extends JFrame implements Observer {
 		    "Engine Power:", cmbEnginePower
 		};
 
-		int option = JOptionPane.showConfirmDialog(null, message, "Setting Locomotive", JOptionPane.OK_CANCEL_OPTION);
+		int option = JOptionPane.showConfirmDialog(null, message, "Setting Locomotive", 
+				JOptionPane.OK_CANCEL_OPTION);
 		if (option == JOptionPane.OK_OPTION && isComboInputValid(cmbEngineType) && 
 				isComboInputValid(cmbEnginePower) && isIntegerInputValid(txtGrossWeight)) {
 		    Object[] locoParams = new Object[3]; //(1)gross weight, (2)engineType, (3)enginepower 
@@ -350,11 +401,20 @@ public class TrainGUI extends JFrame implements Observer {
 
 	} 
 	
-	
+	/**
+	 * Return true if user choose one of options in the combo box
+	 * 
+	 * @param combo: combobox object
+	 * @return : boolean
+	 * */
 	private boolean isComboInputValid(@SuppressWarnings("rawtypes") JComboBox combo){
 		return combo.getSelectedIndex() != -1;
 	}
 	
+	
+	/**
+	 * Return true if the input in a textbox is an integer
+	 * */
 	private boolean isIntegerInputValid(JTextField txtField){
 		try  
 	     {  
@@ -367,10 +427,16 @@ public class TrainGUI extends JFrame implements Observer {
 		return true;
 	}
 	
+	
 	/**
+	 *
+	 * @param String array contains carriage for choosed
 	 * 
+	 * @return One of carriages choosen by users, Otherwise null
 	 * */
 	protected String chooseCar(String[] carToChoose){
+		
+		//setting combobox
 		JComboBox<Object> carTypes = new JComboBox<Object>(carToChoose);
 		
 		Object[] message = {
@@ -378,15 +444,19 @@ public class TrainGUI extends JFrame implements Observer {
 		};
 		carTypes.setSelectedIndex(-1);
 
-		int option = JOptionPane.showConfirmDialog(null, message, "Choose Carriage", JOptionPane.OK_CANCEL_OPTION);
+		//show message
+		int option = JOptionPane.showConfirmDialog(null, message, "Choose Carriage",
+				JOptionPane.OK_CANCEL_OPTION);
 		if (option == JOptionPane.OK_OPTION && carTypes.getSelectedIndex()!=-1) {
 		    
 			return (String) carTypes.getSelectedItem();
 		} 
 		    return null;
-			
 	}
 
+	/**
+	 * 
+	 * */
 	public Integer[] settingPassengerCar() {
 		
 		JTextField txtGrossWeight = new JTextField();
@@ -397,8 +467,10 @@ public class TrainGUI extends JFrame implements Observer {
 		    "Number of Seats:", txtNumOfSeats
 		};
 
-		int option = JOptionPane.showConfirmDialog(null, message, "Setting Passenger Car", JOptionPane.OK_CANCEL_OPTION);
-		if (option == JOptionPane.OK_OPTION && isIntegerInputValid(txtGrossWeight) && isIntegerInputValid(txtNumOfSeats)) {
+		int option = JOptionPane.showConfirmDialog(null, message, "Setting Passenger Car", 
+				JOptionPane.OK_CANCEL_OPTION);
+		if (option == JOptionPane.OK_OPTION && isIntegerInputValid(txtGrossWeight) 
+				&& isIntegerInputValid(txtNumOfSeats)) {
 		    Integer[] passCarParams = new Integer[2]; //(1)gross weight, (2)engineType, (3)enginepower 
 
 		    passCarParams[0] = Integer.parseInt(txtGrossWeight.getText());
@@ -439,16 +511,34 @@ public class TrainGUI extends JFrame implements Observer {
 	
 	}
 	
-	public void setTxtNumOfSeats(Integer numOfSeats){
-		this.txtNumOfSeats.setText(numOfSeats.toString());
+
+
+	public JButton getResetBtn() {
+		return btnReset;
+	}
+	
+	public void resetGame(){
+		//clean up driver display
+		cleanDisplay(this.displayDriverInfo);
+		
+		//clean up conductor display
+		cleanDisplay(this.displayConductorInfo);
+		
+		//clean up train images
+		cleanCarriageImg();
 	}
 
-	@Override
-	public void update(Observable arg0, Object arg1) {
-		
-		//	addCarriageImage();
+	private void cleanCarriageImg() {
+		for(int i = 0; i < listImage.size(); i++){
+			removeImage();
+		}
 		
 	}
+
+	private void cleanDisplay(JTextArea textArea) {
+		textArea.setText("");
+	}
+	
 	
 	
 }
@@ -466,10 +556,6 @@ class CarriageImage extends JPanel  {
 	
 	Color carriageColor;
 	
-	public CarriageImage(){
-		
-	}
-
 	
 	public CarriageImage(String carriageName, TrainModel.CarriageTypes carriageType){
 		this.carriageName = carriageName;
@@ -479,7 +565,7 @@ class CarriageImage extends JPanel  {
 
     private void setColor(CarriageTypes carriageType) {
 		if(carriageType == CarriageTypes.Locomotive){
-			carriageColor = Color.magenta;
+			carriageColor = Color.BLUE;
 		}
 		else if(carriageType == CarriageTypes.PassengerCar){
 			carriageColor = Color.GREEN;
@@ -492,41 +578,22 @@ class CarriageImage extends JPanel  {
 
 	@Override
     public Dimension getPreferredSize() {
-        return new Dimension(150, 100);
+        return new Dimension(150, 80);
     }
 	
     @Override
     public void paint(Graphics g) {
-        /*
-    	String string = "Testing";
-    	Graphics2D g2d = (Graphics2D) g;
-        FontMetrics fm = g2d.getFontMetrics();
-        Rectangle2D r = fm.getStringBounds(string, g2d);
-        int x = (this.getWidth() - (int) r.getWidth()) / 2;
-        int y = (this.getHeight() - (int) r.getHeight()) / 2 + fm.getAscent();
-        g.drawString(string, x, y);
-        //g.setColor(Color.red);
-        int margin = 10;
-        Dimension dim = getSize();
-        g.fillRect(margin, margin, dim.width - margin * 2, dim.height - margin * 2);
-    	*/
-        
-    	//int margin = 10;
-        //Dimension dim = getSize();
         super.paintComponent(g);
         Rectangle b = new Rectangle();
         Dimension dim = getPreferredSize();
         b.setSize(dim);
         
-        Font font = new Font("Arial", Font.BOLD, 20);
+        Font font = new Font("Arial", Font.BOLD, 12);
 
         g.setFont(font);
         g.setColor(carriageColor);
         g.fill3DRect(b.x, b.y, b.width, b.height, false);
-       // g.fillOval(b.x, b.y, b.width, b.height);
         g.setColor(Color.black);
-        //g.drawString("Testing", 10, 10 );
-       // g.drawString("1", b.x + b.width/2 , b.y+ b.height/2);
         FontMetrics fm = g.getFontMetrics();
         Rectangle2D rect = fm.getStringBounds("1", g);
         g.drawString(carriageName, (int) (b.x + b.width/2 - rect.getWidth()/2),
@@ -534,4 +601,4 @@ class CarriageImage extends JPanel  {
     	
     }	
     
-    }
+}

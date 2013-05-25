@@ -10,7 +10,7 @@ import asgn2RollingStock.*;
  * @author Lalu Fahany Yazikri
  * 
  * */
-public class TrainModel /*extends Observable*/ {
+public class TrainModel  {
 	
 	
 	private static DepartingTrain train;
@@ -23,6 +23,20 @@ public class TrainModel /*extends Observable*/ {
 
 	}
 	
+	public void newTrain(){
+		train = new DepartingTrain();
+	}
+	
+	public boolean isContainPassengersCar(){
+		RollingStock carriage = train.firstCarriage();
+		int numPsgCar = 0;
+		while(carriage != null){
+			if(carriage instanceof Locomotive){
+				numPsgCar++;
+			}
+		}
+		return numPsgCar > 0;
+	}
 	
 	private static String getCarriageName(CarriageTypes car){
 		String carName = "";

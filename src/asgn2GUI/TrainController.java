@@ -2,31 +2,25 @@ package asgn2GUI;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Map;
-import java.util.Observable;
-
-import javax.print.attribute.standard.DateTimeAtCompleted;
-
 import asgn2Exceptions.TrainException;
 
-public class TrainController extends Observable {
+public class TrainController{
 
 	private TrainModel model;
 	
 	private TrainGUI view;
+	
+	private String newline = "\n";
 	
 	
 	public TrainController(TrainModel model, TrainGUI gui) {
 		this.model = model;
 		this.view = gui;
 		gui.addActionListener(new TrainListener());
-		/*model.addObserver(view);*/
-		this.addObserver(view);
 		
 	}
 	
 
-	private String newline = "\n";
 	
 	
 	
@@ -48,16 +42,25 @@ public class TrainController extends Observable {
 			else if(source == view.getBoardBtn()){
 				boardPsg();
 			}
-			setBtnBoardEnable();
+			else if(source == view.getResetBtn()){
+				resetGame();
+			}
+			view.setBoardbtnEnable(model.isContainPassengersCar());
 			
 		}
 		
+		private void resetGame() {
+			model.newTrain();
+			view.resetGame();
+		}
+
 		private void removeCarriage() {
 			try{
 				
 				model.removeCarriage();
 				view.updateDriverInfo(model.getDriverInfo());
 				view.updateConductorInfo(model.getConductorInfo());
+				view.removeImage();
 			
 			} catch(TrainException e){
 			
@@ -76,8 +79,7 @@ public class TrainController extends Observable {
 					case "Passenger Car" : settingPassengerCar(); break;
 					case "Freight Car" : settingFreightCar(); break;
 				}
-				//addImage();
-				//checkTrainCanMove();
+				view.updateDriverInfo("pass Add Carriage / Testing");
 			}
 		}
 
@@ -97,11 +99,9 @@ public class TrainController extends Observable {
 				try {
 					model.addLocomotive( grsWeight, locoType);
 					view.updateDriverInfo(model.getDriverInfo());
-					//TrainModel.CarriageTypes type = TrainModel.CarriageTypes.Locomotive; 
-//					/String name = model.getLastCarriage().toString();
-					view.addCarriageImage();
-					notifyObservers();
-					setChanged();
+					
+					addImage();
+					
 				} catch (TrainException e) {
 					view.showErrorMessage(e.toString());
 				} catch (Exception e){
@@ -132,10 +132,9 @@ public class TrainController extends Observable {
 				try{
 					model.addPassengerCar(grossWeight, numberOfSeats);
 					view.updateDriverInfo(model.getDriverInfo());
-					Integer totalNumOfSeats = model.getNumberOfSeats();
-					view.setTxtNumOfSeats(totalNumOfSeats);
+					
 					view.updateConductorInfo(model.getConductorInfo());
-					view.addCarriageImage();
+					addImage();
 				} catch (TrainException e){
 					view.showErrorMessage(e.toString());
 				}
@@ -160,7 +159,7 @@ public class TrainController extends Observable {
 				try{
 					model.addFreightCar(grossWeight, goodsTypeToInput);
 					view.updateDriverInfo(model.getDriverInfo());
-					view.addCarriageImage();
+					addImage();
 				} catch (TrainException e){
 					view.showErrorMessage(e.toString());
 				}
@@ -173,16 +172,11 @@ public class TrainController extends Observable {
 
 	}
 
-	/**
-	 * 
-	 * */
-	public void setBtnBoardEnable() {
-		if(model.getNumberOfSeats() > 0 || model.getNumberOfSeats() > model.getNumberOnBoard()){
-			view.setBoardbtnEnable(true);
-		}
-		else {
-			view.setBoardbtnEnable(false);
-		}
+	
+
+	public void addImage() {
+		view.addCarriageImage(model.getLastCarriageString(), model.getLastCarriageType());
+		view.updateDriverInfo("Testing3");
 	}
 
 	public void checkTrainCanMove() {

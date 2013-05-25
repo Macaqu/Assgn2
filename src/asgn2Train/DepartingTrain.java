@@ -167,7 +167,6 @@ public class DepartingTrain extends Object {
 			nextCarriage = train.get(nextCarriageNumber);
 		}
 		
-		//int maxCarriageNumber = train.size()-1;
 		this.nextCarriageNumber++;
 		
 		return nextCarriage;

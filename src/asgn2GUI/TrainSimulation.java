@@ -10,6 +10,7 @@ public class TrainSimulation {
 		
 		TrainGUI gui = new TrainGUI();
 		
+		@SuppressWarnings("unused")
 		TrainController controller = new TrainController(model, gui);
 		
 		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
