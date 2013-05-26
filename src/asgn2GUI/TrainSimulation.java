@@ -2,6 +2,11 @@ package asgn2GUI;
 
 import javax.swing.JFrame;
 
+/**
+ * the main entry of Train Simulation
+ * 
+ * @author Lalu Fahany Yazikri
+ */
 public class TrainSimulation {
 
 	public static void main(String[] args) {

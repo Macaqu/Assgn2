@@ -1,9 +1,6 @@
 package asgn2GUI;
 
-
 import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
 import javax.swing.*;
 
 import asgn2GUI.TrainModel.CarriageTypes;
@@ -15,6 +12,8 @@ import java.awt.geom.Rectangle2D;
 
 
 /**
+ * @note this GUI is created WITHOUT additional GUI builder
+ * 
  * @author Lalu Fahany Yazikri
  */
 public class TrainGUI extends JFrame{
@@ -37,7 +36,6 @@ public class TrainGUI extends JFrame{
 	private JPanel pnlShowImage;
 	private JPanel pnlImgTitle;
 	
-	
 	//textarea
 	private JTextArea displayDriverInfo;
 	private JTextArea displayConductorInfo;
@@ -48,39 +46,39 @@ public class TrainGUI extends JFrame{
 	private JButton btnBoard;
 	private JButton btnReset;
 	
-	//TextField
-	private JTextField txtNumPassengers;
 	
-	private ArrayList<CarriageImage> listImage;
-	
+	//private ArrayList<CarriageImage> listImage;
 	private GridBagLayout layout;
 	private GridBagConstraints c;
 	
 	private String newline = "\n";
 	
+	/**
+	 * Nullable constructor. 
+	 * */
 	public TrainGUI(){
 		super("Train Simulation");
 		super.setDefaultLookAndFeelDecorated(true);
-		c = new GridBagConstraints();
-		listImage =  new ArrayList<CarriageImage>();
+		
 		initComponents();
 	}
 
-	public JButton getAddCarriageBtn(){
-		return this.btnAddCarriage;
-	}
 	
-	public JButton getRemoveCarBtn(){
-		return this.btnRemoveCarriage;
-	}
-
-	public JButton getBoardBtn(){
-		return this.btnBoard;
-	}
+	/*GUI SETTING*/
 	
+	/**
+	 * Setting width and height of this frame, Initiate GridBagConstraints for managing layout 
+	 * and an array list for store carriage images.
+	 *  
+	 * Call other functions to initiate components. 
+	 * */
 	private void initComponents() {
 		
 		setSize(WIDTH, HEIGHT);
+		
+		c = new GridBagConstraints();
+		
+		//listImage =  new ArrayList<CarriageImage>(); //for store the images of carriages
 		
 		settingLayout();
 		
@@ -89,31 +87,8 @@ public class TrainGUI extends JFrame{
 		settingButton();
 	}
 
-	
-	
 	/**
-	 * 
-	 * */
-	public void updateDriverInfo(String message){
-		this.displayDriverInfo.append(message + newline);
-		displayDriverInfo.update(displayDriverInfo.getGraphics());
-		displayDriverInfo.setCaretPosition(displayDriverInfo.getDocument().getLength());
-	}
-	
-	/**
-	 * 
-	 * */
-	public void updateConductorInfo(String message){
-		this.displayConductorInfo.append(message + newline);
-		displayConductorInfo.update(displayConductorInfo.getGraphics());
-		displayConductorInfo.setCaretPosition(displayConductorInfo.getDocument()
-				.getLength());
-	}
-	
-	
-	
-	/**
-	 * 
+	 * Method for setting buttons in this GUI
 	 * */
 	private void settingButton() {
 		
@@ -136,8 +111,9 @@ public class TrainGUI extends JFrame{
 		pnlReset.add(btnReset);
 	}
 
+	
 	/**
-	 * 
+	 * Method for setting scrollpanes and text area in this GUI
 	 * */
 	private void settingTextArea() {
 		
@@ -148,11 +124,11 @@ public class TrainGUI extends JFrame{
 		
 		//Conductor
 		displayConductorInfo = createTextArea();
-		JScrollPane scrlConductor = createScrollPane(new Dimension(450, 200), true, displayConductorInfo);
-		pnlConductorInfo.add(scrlConductor, BorderLayout.SOUTH);
+		JScrollPane scrlConductor = createScrollPane(new Dimension(450, 200), true, 
+				displayConductorInfo);
+		pnlConductorInfo.add(scrlConductor);
 	
 		//InfoGraph
-		//pnlImages.setLayout(new BorderLayout());
 		JLabel lblImages = new JLabel("Info Graphic");
 		pnlImgTitle.add(lblImages );
 		
@@ -162,34 +138,8 @@ public class TrainGUI extends JFrame{
 	}
 	
 	
-	private JScrollPane createScrollPane(Dimension dimension, boolean isVertical , Component component){
-		JScrollPane scroll =  new JScrollPane(component);
-		scroll.setPreferredSize(dimension);
-		
-		if(isVertical){
-			scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		}
-		else{
-			scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		}
-		
-		return scroll;
-	}
-	
-	
-	private JTextArea createTextArea(){
-		
-		//create textarea
-		JTextArea textArea = new JTextArea();
-		textArea.setEditable(false);
-		textArea.setLineWrap(true);
-		
-		return textArea;
-	}
-
-	
 	/**
-	 * 
+	 * Method for setting layout/panel in this GUI 
 	 * */
 	private void settingLayout() {
 		layout = new GridBagLayout();
@@ -251,7 +201,7 @@ public class TrainGUI extends JFrame{
 		//images panel 
 		pnlImages.setLayout(new BorderLayout());
 		pnlImages.add(pnlImgTitle, BorderLayout.NORTH);
-		pnlShowImage = new JPanel(); //add into scrollpane of image
+		pnlShowImage = createPanel(Color.white); //add into scrollpane of image
 		
 		JPanel pnlFootyImage = createPanel(defaultClr);
 		pnlImages.add(pnlFootyImage, BorderLayout.SOUTH);
@@ -287,94 +237,277 @@ public class TrainGUI extends JFrame{
 	}
 
 	
+	/**
+	 * Return a component type JScrollPane
+	 * 
+	 * @param Dimension dimension : the dimension of this scrollpane
+	 * @param boolean isVertical : true if the scrollpane is set in vertical scroll bar,
+	 * 								false if the scrollpane is set in horizontal scroll bar
+	 * @param Component component: component inside the scroll pane
+	 * 
+	 * @return JScrollPane
+	 * */
+	private JScrollPane createScrollPane(Dimension dimension, boolean isVertical, 
+			Component component){
+		JScrollPane scroll =  new JScrollPane(component);
+		scroll.setPreferredSize(dimension);
+		
+		if(isVertical){
+			scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		}
+		else{
+			scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		}
+		
+		return scroll;
+	}
+	
+	
+	/**
+	 * Return a compoent type JTextArea
+	 * 
+	 * @return JTextArea
+	 * */
+	private JTextArea createTextArea(){
+		
+		JTextArea textArea = new JTextArea();
+		textArea.setEditable(false);
+		textArea.setLineWrap(true);
+		
+		return textArea;
+	}
+
+	
+	/**
+	 * 
+	 * @param Color background: the background color of JPanel 
+	 *
+	 * @return JPanel
+	 * */
 	private JPanel createPanel(Color background){
 		JPanel panel = new JPanel();
 		panel.setBackground(background);
 		return panel;
 	}
 	
+	
+	/**
+	 * @param String buttonName: a string that is displayed in the button
+	 * @param Dimension dimension: the size of the button
+	 * 
+	 * @return JButton
+	 * */
 	private JButton createButton(String buttonName, Dimension dimension){
 		JButton newButton = new JButton(buttonName);
 		newButton.setVisible(true);
 		newButton.setPreferredSize(dimension);
 		return newButton;
 	}
-	
-	protected void removeImage(){
-		CarriageImage image = listImage.get(listImage.size()-1);
-		listImage.remove(image);
-		pnlShowImage.remove(image);
-		pnlShowImage.repaint();
-		pnlShowImage.revalidate();
-	}
-	
-	
-	
-	protected void addCarriageImage(String name, TrainModel.CarriageTypes type){
-		
-		CarriageImage image = new CarriageImage(name, type); 
-		
-		listImage.add(image);
-		pnlShowImage.add(image);
-		
-		pnlShowImage.repaint();
-		pnlShowImage.revalidate();
-		
-	}
+
 	
 	/**
+	 * Add buttons with ActionListener
 	 * 
+	 *  @param ActionListener
 	 * */
-	public void addActionListener(ActionListener listener){
+	protected void addActionListener(ActionListener listener){
 		this.btnAddCarriage.addActionListener(listener);
 		this.btnBoard.addActionListener(listener);
 		this.btnRemoveCarriage.addActionListener(listener);
 		this.btnReset.addActionListener(listener);
 		
 	}
+	/*END GUI SETTING*/
 	
 	
-
+	
+	/*ACCESSOR*/
+	
 	/**
+	 * Accessor of the button for adding carriages 
 	 * 
+	 * @return JButton btnAddCarriage
+	 * */
+	protected JButton getAddCarriageBtn(){
+		return this.btnAddCarriage;
+	}
+	
+	
+	/**
+	 * Accessor of the button for remove carriages 
+	 * 
+	 * @return JButton btnRemoveCarriage
+	 * */
+	protected JButton getRemoveCarBtn(){
+		return this.btnRemoveCarriage;
+	}
+
+	
+	/**
+	 * Accessor of the button for boarding passengers 
+	 * 
+	 * @return JButton btnBoard
+	 * */
+	protected JButton getBoardBtn(){
+		return this.btnBoard;
+	}
+	
+	
+	/**
+	 * Accessor of the textarea for displaying driver info
+	 * 
+	 * @return JTextArea displayDriverInfo
+	 * */
+	protected JTextArea getDriverDisplay(){
+		return this.displayDriverInfo;
+	}
+	
+	
+	/**
+	 * Accessor of the textarea for displaying conductor info
+	 * 
+	 * @return JTextArea displayConductorInfo
+	 * */
+	protected JTextArea getConductorDisplay(){
+		return this.displayConductorInfo;
+	}
+	
+	
+	/**
+	 * Accessor of the textarea for reset game
+	 * 
+	 * @return JTextArea btnReset
+	 * */
+	protected JButton getResetBtn() {
+		return btnReset;
+	}
+	
+	/*END ACCESSOR*/
+	
+	
+	/*MUTATOR*/
+	protected void setBoardbtnEnable(boolean isEnable){
+		btnBoard.setEnabled(isEnable);
+	}
+	/*END MUTATOR*/
+	
+	
+	
+	/*DISPLAYED INFO */
+	
+	
+	/**
+	 * update the driver textarea
+	 * 
+	 * @param String message : message for displayed
+	 * @param JTextArea display : the name of textarea when the info will be displayed
+	 * */
+	protected void updateInfo(String message, JTextArea display, Color color){
+		display.append(message + newline);
+		display.setForeground(color);
+		display.update(display.getGraphics());
+		display.setCaretPosition(display.getDocument().getLength());
+	}
+	
+	
+	/**
+	 * show the error message in dialog box
+	 * 
+	 * @param String errorMsg : error message that will be displayed
 	 * */
 	protected void showErrorMessage(String errorMsg){
 		JOptionPane.showConfirmDialog(null, errorMsg, "Setting Locomotive",
 				JOptionPane.CLOSED_OPTION);
+	}
+	/*END DISPLAYED INFO*/
+	
+	
+	
+	/*CARRIAGE IMAGES*/
+	
+	protected void updateImage(ArrayList<CarriageImage> imagesList){
+		removeAllImages();
+		addCarriageImages(imagesList);
+	}
+	
+	protected void removeAllImages(){
+		pnlShowImage.removeAll();
+	}
+	
+	/**
+	 * 	Method for remove image
+	 * */
+	 
+	protected void removeImage(CarriageImage image){
+		pnlShowImage.remove(image);
+		pnlShowImage.repaint();
+		pnlShowImage.revalidate();
+	}
+	
+	
+	/**
+	 * Method for add an image in the Info Graphic
+	 * 
+	 * @param String name: a string that is displayed in the image. Taken from object's tostring
+	 * @param TrainModel.CarriageTypes type: the type of carriages which is defined in 
+	 * CarriageTypes enum in TrainModel class
+	 */
+	
+	protected void addCarriageImages(ArrayList<CarriageImage> imagesList){
 		
+		for(int i = 0; i < imagesList.size(); i++){
+		pnlShowImage.add(imagesList.get(i));
+		}
+		
+		pnlShowImage.repaint();
+		pnlShowImage.revalidate();
 	}
+	/*END CARRIAGE IMAGE*/
 	
-	protected void setNumOnBoard(Integer psgOnBoard){
-		this.txtNumPassengers.setText(psgOnBoard.toString());
-	}
 	
+	/*USER'S INPUT*/
+	
+	/**
+	 * Take the user's input to add passengers when boarding
+	 * 
+	 * @return Integer : the number of passengers that will be add in the train
+	 * */
 	protected Integer addPassengers(){
 		JTextField txtPassengers = new JTextField();
 		
 		Object[] message = {
 				"Passenger boarding :", txtPassengers,	
 			};
-		int option = JOptionPane.showConfirmDialog(null, message, "Passenger boarding", JOptionPane.OK_CANCEL_OPTION);
+		
+		int option = JOptionPane.showConfirmDialog(null, message, "Passenger boarding", 
+				JOptionPane.OK_CANCEL_OPTION);
+		
 		if (option == JOptionPane.OK_OPTION && isIntegerInputValid(txtPassengers)) {
-		    Integer addPassengers = Integer.parseInt(txtPassengers.getText());
+		    
+			Integer addPassengers = Integer.parseInt(txtPassengers.getText());
 		    return addPassengers;
-		} else {
+		
+		} 
+		else {
 		    return null;
 		}	
-		
 	}
 	
-	protected void setBoardbtnEnable(boolean isEnable){
-		btnBoard.setEnabled(isEnable);
-	}
+	
 	
 	/**
+	 * Taken the user's input when add locomotive in the train
 	 * 
+	 * @param String[] engineType: a string array contains the engine types 
+	 * @param String[] enginePower: a string array contains the engine power
+	 * 
+	 * @return Object[]: a object array that contain the type of engine, the power type of engine,
+	 *  the weight of engine
 	 * */
 	protected Object[] settingLocomotive(String[] engineType, String[] enginePower){
 		JTextField txtGrossWeight = new JTextField();
 		
-		//setting combo boxes
+		//set up combo boxes and textfield
 		JComboBox<Object> cmbEngineType = new JComboBox<Object>(engineType);
 		JComboBox<Object> cmbEnginePower = new JComboBox<Object>(enginePower);
 		cmbEngineType.setSelectedIndex(-1);
@@ -387,19 +520,22 @@ public class TrainGUI extends JFrame{
 
 		int option = JOptionPane.showConfirmDialog(null, message, "Setting Locomotive", 
 				JOptionPane.OK_CANCEL_OPTION);
+		
 		if (option == JOptionPane.OK_OPTION && isComboInputValid(cmbEngineType) && 
 				isComboInputValid(cmbEnginePower) && isIntegerInputValid(txtGrossWeight)) {
 		    Object[] locoParams = new Object[3]; //(1)gross weight, (2)engineType, (3)enginepower 
 		    
+		    //set data
 		    locoParams[0] = Integer.parseInt(txtGrossWeight.getText());
 		    locoParams[1] = cmbEngineType.getSelectedItem().toString();
 		    locoParams[2] = cmbEnginePower.getSelectedItem().toString();
+		    
 		    return locoParams;
 		} else {
 		    return null;
 		}	
-
 	} 
+	
 	
 	/**
 	 * Return true if user choose one of options in the combo box
@@ -414,6 +550,8 @@ public class TrainGUI extends JFrame{
 	
 	/**
 	 * Return true if the input in a textbox is an integer
+	 * 
+	 * @return boolean
 	 * */
 	private boolean isIntegerInputValid(JTextField txtField){
 		try  
@@ -432,7 +570,7 @@ public class TrainGUI extends JFrame{
 	 *
 	 * @param String array contains carriage for choosed
 	 * 
-	 * @return One of carriages choosen by users, Otherwise null
+	 * @return String: One of carriages choosen by users, Otherwise null
 	 * */
 	protected String chooseCar(String[] carToChoose){
 		
@@ -444,7 +582,7 @@ public class TrainGUI extends JFrame{
 		};
 		carTypes.setSelectedIndex(-1);
 
-		//show message
+		//show form dgialof
 		int option = JOptionPane.showConfirmDialog(null, message, "Choose Carriage",
 				JOptionPane.OK_CANCEL_OPTION);
 		if (option == JOptionPane.OK_OPTION && carTypes.getSelectedIndex()!=-1) {
@@ -454,10 +592,13 @@ public class TrainGUI extends JFrame{
 		    return null;
 	}
 
+	
 	/**
+	 * Return an Integer array that contains parameters for create a passenger car
 	 * 
+	 * @return Integer[] parameters that choosen by users, otherwise null
 	 * */
-	public Integer[] settingPassengerCar() {
+	protected Integer[] settingPassengerCar() {
 		
 		JTextField txtGrossWeight = new JTextField();
 		JTextField txtNumOfSeats = new JTextField();
@@ -469,10 +610,13 @@ public class TrainGUI extends JFrame{
 
 		int option = JOptionPane.showConfirmDialog(null, message, "Setting Passenger Car", 
 				JOptionPane.OK_CANCEL_OPTION);
+		
 		if (option == JOptionPane.OK_OPTION && isIntegerInputValid(txtGrossWeight) 
 				&& isIntegerInputValid(txtNumOfSeats)) {
-		    Integer[] passCarParams = new Integer[2]; //(1)gross weight, (2)engineType, (3)enginepower 
-
+		   
+			Integer[] passCarParams = new Integer[2]; //(1)gross weight, (2)number of seats
+			
+			//set data
 		    passCarParams[0] = Integer.parseInt(txtGrossWeight.getText());
 		    passCarParams[1] = Integer.parseInt(txtNumOfSeats.getText());
 
@@ -480,14 +624,18 @@ public class TrainGUI extends JFrame{
 		} else {
 		    return null;
 		}	
-
 	}
 	
 	
-	public Object[] settingFreightCar(String[] goodsType) {
+	/**
+	 * Return an Integer array that contains parameters for create a freight car
+	 * 
+	 * @return Object[] parameters that choosen by users. Otherwise null.
+	 * */
+	protected Object[] settingFreightCar(String[] goodsType) {
 		
+		//create dialog
 		JTextField txtGrossWeight = new JTextField();
-		
 		JComboBox<Object> cbGoodsType = new JComboBox<Object>(goodsType);
 		cbGoodsType.setSelectedIndex(-1);
 		
@@ -496,28 +644,32 @@ public class TrainGUI extends JFrame{
 		    "GoodsType:", cbGoodsType
 		};
 
-		int option = JOptionPane.showConfirmDialog(null, message, "Setting Passenger Car", JOptionPane.OK_CANCEL_OPTION);
-		if (option == JOptionPane.OK_OPTION && isIntegerInputValid(txtGrossWeight) && isComboInputValid(cbGoodsType)) {
-		    Object[] freightCarParams = new Object[2]; //(1)gross weight, (2)engineType, (3)enginepower 
-
-		    freightCarParams[0] = Integer.parseInt(txtGrossWeight.getText());
+		//pop up
+		int option = JOptionPane.showConfirmDialog(null, message, "Setting Passenger Car", 
+				JOptionPane.OK_CANCEL_OPTION);
+		
+		if (option == JOptionPane.OK_OPTION && isIntegerInputValid(txtGrossWeight) && 
+				isComboInputValid(cbGoodsType)) {
+		    
+			//catch the user's inputs
+			Object[] freightCarParams = new Object[2]; //(1)gross weight, (2)goodsType
+			freightCarParams[0] = Integer.parseInt(txtGrossWeight.getText());
 		    freightCarParams[1] = cbGoodsType.getSelectedItem().toString();
 
 		    return freightCarParams;
 		} else {
 		    return null;
 		}	
-
-	
 	}
-	
+	/*END USER'S INPUT*/
 
 
-	public JButton getResetBtn() {
-		return btnReset;
-	}
+	/*RESET GAME*/
 	
-	public void resetGame(){
+	/**
+	 * Call another method to clean up the current states in this GUI
+	 * */
+	protected void resetGame(){
 		//clean up driver display
 		cleanDisplay(this.displayDriverInfo);
 		
@@ -525,44 +677,63 @@ public class TrainGUI extends JFrame{
 		cleanDisplay(this.displayConductorInfo);
 		
 		//clean up train images
-		cleanCarriageImg();
+		pnlShowImage.removeAll();
 	}
 
-	private void cleanCarriageImg() {
-		for(int i = 0; i < listImage.size(); i++){
-			removeImage();
-		}
-		
-	}
+	
+	
 
+	/**
+	 * Clean up display
+	 * */
 	private void cleanDisplay(JTextArea textArea) {
 		textArea.setText("");
 	}
-	
-	
-	
-}
+	/*END RESET GAME*/
+
+}/*END TRAIN GUI CLASS*/
 
 
-
+/**
+ * 
+ * This class has a usage for create the train image
+ * 
+ * @author Lalu Fahany Yazikri
+ */
 class CarriageImage extends JPanel  {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	private String carriageName;
 	
-	Color carriageColor;
+	private Color carriageColor;
 	
 	
+	/**
+	 * Constructor taken two arguments. Set the carriage name that will be represented from 
+	 * the color of image and the string of carriage that will be displayed in the image
+	 * 
+	 * @param carriageName - the string that will display in the carriage image
+	 * @param carriageType - the carriage type based on the type defined in TrainModel.CarriageTypes enum 
+	 * */
 	public CarriageImage(String carriageName, TrainModel.CarriageTypes carriageType){
-		this.carriageName = carriageName;
+		setCarriageName(carriageName);
 		setColor(carriageType);
 	}
 
-
+	/**
+	 * Mutator for the string which display in the image
+	 * @param carriageName - the string that will display in the carriage image
+	 */
+	public void setCarriageName(String carriageName){
+		this.carriageName = carriageName;
+	}
+	
+	/**
+	 * set up the color of the carriage image based on carriage type
+	 * 
+	 * @param carriageType -  the carriage type based on the type defined in TrainModel.CarriageTypes enum 
+	 * */
     private void setColor(CarriageTypes carriageType) {
 		if(carriageType == CarriageTypes.Locomotive){
 			carriageColor = Color.BLUE;
@@ -575,12 +746,22 @@ class CarriageImage extends JPanel  {
 		}
 	}
 
-
+    
+    /**
+     * 
+     * @return the dimensions of carriage image
+     * */
 	@Override
     public Dimension getPreferredSize() {
-        return new Dimension(150, 80);
+        return new Dimension(170, 80);
     }
 	
+	
+	/**
+	 * Override paint method in JPanel
+	 * 
+	 * @param Graphics g
+	 * */
     @Override
     public void paint(Graphics g) {
         super.paintComponent(g);
@@ -589,14 +770,15 @@ class CarriageImage extends JPanel  {
         b.setSize(dim);
         
         Font font = new Font("Arial", Font.BOLD, 12);
-
+        
         g.setFont(font);
+        
         g.setColor(carriageColor);
         g.fill3DRect(b.x, b.y, b.width, b.height, false);
-        g.setColor(Color.black);
+        g.setColor(Color.white);
         FontMetrics fm = g.getFontMetrics();
         Rectangle2D rect = fm.getStringBounds("1", g);
-        g.drawString(carriageName, (int) (b.x + b.width/2 - rect.getWidth()/2),
+        g.drawString(carriageName, (int)b.width/5,
                           (int) (b.y + b.height/2 + rect.getHeight()/2));
     	
     }	

@@ -6,6 +6,8 @@ import asgn2Exceptions.TrainException;
  * A passenger car is designed to carry people and has a fixed seating capacity. 
  * We assume that the train is a long-distance one in which all passengers are assigned a seat (unlike your peak-hour, metropolitan commuting experience!).
  * 
+ * 
+ * @author Lalu Fahany Yazikri
  * */
 public class PassengerCar extends RollingStock {
 
@@ -18,10 +20,10 @@ public class PassengerCar extends RollingStock {
 	/**
 	 * Constructs a passenger car with a known weight and a fixed number of seats. (We allow a passenger car to have zero seats, 
 	 * although it would not be very useful.)
-	 * @param :  the carriage's gross weight in tonnes (ignoring the weight of passengers, which we treat as negligible)
-	 * @param : numberOfSeats - how many seats are available in the carriage
-	 * @throws: TrainException - if the gross weight is not positive or if the number of seats is negative
-	 * */
+	 * @param grossWeight -  the carriage's gross weight in tonnes (ignoring the weight of passengers, which we treat as negligible)
+	 * @param numberOfSeats - how many seats are available in the carriage
+	 * @throws TrainException - if the gross weight is not positive or if the number of seats is negative
+	 */
 	public PassengerCar(Integer grossWeight, Integer numberOfSeats) throws TrainException {
 		super(grossWeight);
 		
@@ -39,25 +41,26 @@ public class PassengerCar extends RollingStock {
 	/**
 	 * Adds the given number of new passengers to the number on board the carriage. If there are too many new passengers for 
 	 * the number of spare seats the left over people are not boarded.
-	 * @param : newPassengers - the number of people who wish to board the carriage
-	 * @return : the number of people who were unable to board the carriage because they couldn't get a seat
-	 * @throws : TrainException - if the number of new passengers is negative
+	 * @param  newPassengers - the number of people who wish to board the carriage
+	 * @return  the number of people who were unable to board the carriage because they couldn't get a seat
+	 * @throws  TrainException - if the number of new passengers is negative
 	 * */
 	public Integer board(Integer newPassengers) throws TrainException {
 		
 		if(newPassengers < MIN_VALID_PARAMS_INTEGER){
-			throw new TrainException("");
+			throw new TrainException("Passenger cannot negative");
 		} 
 		
 		if(isSpaceOnBoardAvailable(newPassengers)){
 			this.numberOnBoard += newPassengers;
-			return 0;
+			return 0; //no passenger is refused
 		} 
 		else {
 			return newPassengers + this.numberOnBoard - this.numberOfSeats;
 		}
 	}
 	
+	/*Return true if space on board available*/
 	private boolean isSpaceOnBoardAvailable(Integer newPassengers){
 		
 		return newPassengers + this.numberOnBoard <= this.numberOfSeats;
@@ -86,17 +89,19 @@ public class PassengerCar extends RollingStock {
 	 * */
 	public void alight(Integer departingPassengers) throws TrainException {
 		
-		if(departingPassengers < MIN_VALID_PARAMS_INTEGER){
+		if(departingPassengers < MIN_VALID_PARAMS_INTEGER){ //if parameter negative
 			throw new TrainException("failed - the number of departing passengers cannot negative");
 		}
 		
-		if(departingPassengers > this.numberOnBoard){
-			throw new TrainException("failed - the number of departing passengers cannot exceed the number on board");
+		if(departingPassengers > this.numberOnBoard){ 
+			throw new TrainException("failed - the number of departing passengers" +
+					" cannot exceed the number on board");
 		}
 		
 		numberOnBoard -= departingPassengers;
 		
 	}
+	
 	
 	/**
 	 * Returns a human-readable description of the passenger car. 
@@ -108,7 +113,5 @@ public class PassengerCar extends RollingStock {
 		
 		return "Passenger(" + numberOnBoard.toString() + "/" + numberOfSeats.toString() + ")";
 	}
-
-		
 
 }

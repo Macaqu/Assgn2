@@ -63,7 +63,7 @@ public class DepartingTrain extends Object {
 	
 	
 	/**
-	 * 
+	 * Return true if there is passenger(s) on board
 	 * */
 	private boolean isThereAnyPassengerOnBoard(){
 		return train.size() > 0 && numberOnBoard() != 0;
@@ -85,40 +85,48 @@ public class DepartingTrain extends Object {
 	}
 	
 	/**
-	 * 
+	 * Return true if the train is empty. Otherwise, return false
 	 * */
 	private boolean isPreviousCarNull(){
 		return train.size() == 0;
 	}
 	
 	/**
-	 * 
+	 * Return true if previous carriage is a passenger car. Otherwise, return false
 	 * */
 	private boolean isPreviousCarPassengerCar(){
 		return (train.get(train.size()-1) instanceof PassengerCar);
 	}
 	
 	/**
-	 * 
+	 * Return true if previous carriage is a locomotive. Otherwise, return false
 	 * */
 	private boolean isPreviousCarLoco(){
 		return (train.get(train.size()-1) instanceof Locomotive);
 	}
 	
 	/**
-	 * 
+	 * Return true if previous carriage is a freight car. Otherwise, return false
 	 * */
 	private boolean isPreviousCarFreightCar(){
 		return (train.get(train.size()-1) instanceof FreightCar);
 	}
 	
 	/**
-	 * 
+	 * Returns whether or not the train is capable of moving. A train can move if its locomotive's pulling power equals or exceeds the train's total weight (including the locomotive itself). 
+	 * In the degenerate case of a "train" which doesn't have any rolling stock at all yet, the method returns true. 
+	 *
+	 * @return true if the train can move (or contains no carriages), false otherwise
 	 * */
 	public boolean trainCanMove() {
-		Locomotive locomotive = (Locomotive)train.get(0);
+		boolean canMove = true;
 		
-		return (locomotive.power() > getGrossWeight());
+		if(train.size() > 0){
+			Locomotive locomotive = (Locomotive)train.get(0);
+			return (locomotive.power() > getGrossWeight());
+		}
+		
+		return canMove;
 	}
 
 	/**
@@ -173,7 +181,7 @@ public class DepartingTrain extends Object {
 	}
 
 	/**
-	 * 
+	 * Return true if the counter of next carriage number less than the train length
 	 * */
 	private boolean possibleGetNextCrg(){
 		return this.nextCarriageNumber < train.size();
@@ -268,6 +276,7 @@ public class DepartingTrain extends Object {
 		
 		for(int idx = 0; idx < train.size(); idx++){
 			RollingStock carriage = train.get(idx);
+			
 			if(carriage instanceof PassengerCar){
 				numberOfSeats += ((PassengerCar)carriage).numberOfSeats();
 			}

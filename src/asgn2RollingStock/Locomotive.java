@@ -18,6 +18,7 @@ import asgn2Exceptions.TrainException;
  * NB: This figure includes the weight of the locomotive itself.
  * Thus a locomotive classified as only "1D" which weighs 180 tonnes cannot move!
  *
+ * @author Lalu Fahany Yazikri
  * */
 public class Locomotive extends RollingStock {
 
@@ -35,11 +36,11 @@ public class Locomotive extends RollingStock {
 		final int VALID_CLASS_LENGTH = 2;
 		
 		if(classification.length()!= VALID_CLASS_LENGTH){
-			throw new TrainException("Failed - the length of classification must be 2");
+			throw new TrainException("Invalid - the length of classification must be 2");
 		}
 		
 		if(!isValidPower(classification)){
-			throw new TrainException("Failed - the power class is in the range 1 to 9");
+			throw new TrainException("Invalid - the power class is in the range 1 to 9");
 		}
 		
 		if(!isValidEngineType(classification)){
@@ -50,11 +51,15 @@ public class Locomotive extends RollingStock {
 		
 	}
 
+	/*Return true if the power classification in the supplied argument 
+	 * no more equals 9 and no less equals 1*/
 	private boolean isValidPower(String classification){
 		int power = Integer.parseInt(classification.substring(0, 1));
 		return power >= 1 && power <= 9;
 	}
 
+	/*Return true if the engine types in the supplied argument is either 
+	 * E, D or S*/
 	private boolean isValidEngineType(String classification){
 		String engineType = classification.substring(1, 2);
 		return engineType.equals("E") || engineType.equals("D") || engineType.equals("S");

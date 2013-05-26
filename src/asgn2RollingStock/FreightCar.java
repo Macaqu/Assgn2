@@ -10,6 +10,8 @@ import asgn2Exceptions.TrainException;
  * "G" - General goods
  * "R" - Refrigerated goods
  * "D" - Dangerous materials
+ * 
+ * @author Lalu Fahany Yazikri
  * */
 public class FreightCar extends RollingStock {
 
@@ -33,19 +35,27 @@ public class FreightCar extends RollingStock {
 		
 	}
 	
+	/**
+	 * Return true if the supplied argument (goodsType) is either "G", "R" or "D" 
+	 * 
+	 *  @param goodsType - the type of goods the car is designed to carry (either "G", "R" or "D")
+	 */
 	private boolean isValidGoodsType(String goodsType)
 	{
 		return (goodsType.equals("G") || goodsType.equals("R")|| goodsType.equals("D")) ; 
 	}
 
+	
 	/**
 	 * Returns the type of goods this carriage was designed to carry.
-	 * @return : the goodsType (G", "R" or "D")
+	 * 
+	 * @return  the goodsType (G", "R" or "D")
 	 * */
 	public String goodsType(){
 		
 		return this.goodsType;
 	}
+	
 	
 	/**
 	 *   Returns a human-readable description of the freight car. This has the form "Freight(x)" 
