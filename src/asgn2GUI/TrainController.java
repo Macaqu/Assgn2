@@ -68,7 +68,7 @@ public class TrainController{
 				resetGame();
 			}
 			setBoardbtnEnable();
-			setRemovebtnEnable();
+			
 		}
 	}
 
@@ -83,20 +83,6 @@ public class TrainController{
 		view.setBoardbtnEnable(isEnable);
 	}
 
-	
-	/**
-	 * 
-	 * Enable remove button if minimum one carriage exists 
-	 */
-	private void setRemovebtnEnable(){
-		boolean isEnable = false;
-		
-		if(model.isLocomotiveExist()){
-			isEnable = true;
-		}
-		view.setRemoveCrgBtnEnable(isEnable);
-	}
-	
 	
 	/**
 	 * Reset the game. Call the newTrain method in the model and the resetGame in the view

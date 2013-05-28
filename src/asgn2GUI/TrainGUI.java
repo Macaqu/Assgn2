@@ -46,6 +46,8 @@ public class TrainGUI extends JFrame{
 	private JButton btnBoard;
 	private JButton btnReset;
 	
+	
+	//private ArrayList<CarriageImage> listImage;
 	private GridBagLayout layout;
 	private GridBagConstraints c;
 	
@@ -76,6 +78,8 @@ public class TrainGUI extends JFrame{
 		
 		c = new GridBagConstraints();
 		
+		//listImage =  new ArrayList<CarriageImage>(); //for store the images of carriages
+		
 		settingLayout();
 		
 		settingTextArea();
@@ -94,7 +98,6 @@ public class TrainGUI extends JFrame{
 		btnAddCarriage = createButton("Add A Carriage", defaultDim);
 		
 		btnRemoveCarriage = createButton("Remove Carriage",defaultDim);
-		btnRemoveCarriage.setEnabled(false);
 		
 		btnBoard = createButton("Board", defaultDim);
 		btnBoard.setEnabled(false);
@@ -220,6 +223,7 @@ public class TrainGUI extends JFrame{
 		JLabel lblConductor = new JLabel("Conductor");
 		JPanel pnlLblConductor = createPanel(defaultClr);
 		pnlLblConductor.add(lblConductor);
+		
 		
 		pnlConductorInfo = createPanel(defaultClr);
 		pnlConductorButton = createPanel(defaultClr);
@@ -385,10 +389,6 @@ public class TrainGUI extends JFrame{
 	protected void setBoardbtnEnable(boolean isEnable){
 		btnBoard.setEnabled(isEnable);
 	}
-	
-	protected void setRemoveCrgBtnEnable(boolean isEnable){
-		btnRemoveCarriage.setEnabled(isEnable);
-	}
 	/*END MUTATOR*/
 	
 	
@@ -416,8 +416,8 @@ public class TrainGUI extends JFrame{
 	 * @param String errorMsg : error message that will be displayed
 	 * */
 	protected void showErrorMessage(String errorMsg){
-		JOptionPane.showConfirmDialog(null, errorMsg, "Error ",
-				JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showConfirmDialog(null, errorMsg, "Setting Locomotive",
+				JOptionPane.CLOSED_OPTION);
 	}
 	/*END DISPLAYED INFO*/
 	
@@ -432,6 +432,14 @@ public class TrainGUI extends JFrame{
 	
 	protected void removeAllImages(){
 		pnlShowImage.removeAll();
+	}
+	
+	/**
+	 * 	Method for remove image
+	 * */
+	 
+	protected void removeImage(CarriageImage image){
+		pnlShowImage.remove(image);
 		pnlShowImage.repaint();
 		pnlShowImage.revalidate();
 	}
@@ -637,7 +645,7 @@ public class TrainGUI extends JFrame{
 		};
 
 		//pop up
-		int option = JOptionPane.showConfirmDialog(null, message, "Setting Freight Car", 
+		int option = JOptionPane.showConfirmDialog(null, message, "Setting Passenger Car", 
 				JOptionPane.OK_CANCEL_OPTION);
 		
 		if (option == JOptionPane.OK_OPTION && isIntegerInputValid(txtGrossWeight) && 
@@ -669,7 +677,7 @@ public class TrainGUI extends JFrame{
 		cleanDisplay(this.displayConductorInfo);
 		
 		//clean up train images
-		removeAllImages();
+		pnlShowImage.removeAll();
 	}
 
 	

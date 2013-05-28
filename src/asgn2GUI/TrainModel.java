@@ -40,9 +40,9 @@ public class TrainModel  {
 	
 	/**
 	 * 
-	 * @param CarriageTypes carriage  
+	 * @param CarriageTypes carriage : 
 	 * 
-	 * @return String - the name of carriage
+	 * @return String
 	 */
 	private static String getCarriageName(CarriageTypes carriage){
 		String carName = "";
@@ -59,7 +59,7 @@ public class TrainModel  {
 	
 	/**
 	 * 
-	 * @return double total gross weight in the train
+	 * @return double
 	 */
 	public double getGrossWeight(){
 		double grossWeight = 0;
@@ -80,13 +80,6 @@ public class TrainModel  {
 		return grossWeight;
 	}
 	
-	
-	/**
-	 *  @return boolean - true if first carriage is not null
-	 */
-	public boolean isLocomotiveExist(){
-		return train.firstCarriage() != null;
-	}
 	
 	/**
 	 * String factory for the driver info
