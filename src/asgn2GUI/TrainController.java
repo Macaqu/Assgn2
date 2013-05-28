@@ -9,8 +9,9 @@ import asgn2Exceptions.TrainException;
 /**
  * This class has a role as the Controller for TrainGUI(the view) and TrainModel(the model)
  * 
- * @author Lalu Fahany Yazikri
+ * @author Yudo Dwi Hanggodo Patriabekti
  * */
+
 public class TrainController{
 
 	private TrainModel model;
