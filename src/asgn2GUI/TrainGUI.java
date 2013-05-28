@@ -15,6 +15,7 @@ import java.awt.geom.Rectangle2D;
  * @note this GUI is created WITHOUT additional GUI builder
  * 
  * @author Lalu Fahany Yazikri
+ * @author Yudo Dwi Hanggodo Patriabekti
  */
 public class TrainGUI extends JFrame{
 
@@ -98,6 +99,7 @@ public class TrainGUI extends JFrame{
 		btnAddCarriage = createButton("Add A Carriage", defaultDim);
 		
 		btnRemoveCarriage = createButton("Remove Carriage",defaultDim);
+		btnRemoveCarriage.setEnabled(false);
 		
 		btnBoard = createButton("Board", defaultDim);
 		btnBoard.setEnabled(false);
@@ -389,6 +391,10 @@ public class TrainGUI extends JFrame{
 	protected void setBoardbtnEnable(boolean isEnable){
 		btnBoard.setEnabled(isEnable);
 	}
+	
+	protected void setRemoveCrgBtnEnable(boolean isEnable){
+		btnRemoveCarriage.setEnabled(isEnable);
+	}
 	/*END MUTATOR*/
 	
 	
@@ -417,7 +423,7 @@ public class TrainGUI extends JFrame{
 	 * */
 	protected void showErrorMessage(String errorMsg){
 		JOptionPane.showConfirmDialog(null, errorMsg, "Setting Locomotive",
-				JOptionPane.CLOSED_OPTION);
+				JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
 	}
 	/*END DISPLAYED INFO*/
 	
@@ -432,17 +438,11 @@ public class TrainGUI extends JFrame{
 	
 	protected void removeAllImages(){
 		pnlShowImage.removeAll();
-	}
-	
-	/**
-	 * 	Method for remove image
-	 * */
-	 
-	protected void removeImage(CarriageImage image){
-		pnlShowImage.remove(image);
 		pnlShowImage.repaint();
 		pnlShowImage.revalidate();
 	}
+	
+	
 	
 	
 	/**
@@ -456,7 +456,7 @@ public class TrainGUI extends JFrame{
 	protected void addCarriageImages(ArrayList<CarriageImage> imagesList){
 		
 		for(int i = 0; i < imagesList.size(); i++){
-		pnlShowImage.add(imagesList.get(i));
+			pnlShowImage.add(imagesList.get(i));
 		}
 		
 		pnlShowImage.repaint();
@@ -513,7 +513,7 @@ public class TrainGUI extends JFrame{
 		cmbEngineType.setSelectedIndex(-1);
 		cmbEnginePower.setSelectedIndex(-1);
 		Object[] message = {
-			"Gross weight :", txtGrossWeight,	
+			"Gross weight (Tonnes):", txtGrossWeight,	
 		    "Engine Types:", cmbEngineType,
 		    "Engine Power:", cmbEnginePower
 		};
@@ -604,7 +604,7 @@ public class TrainGUI extends JFrame{
 		JTextField txtNumOfSeats = new JTextField();
 		
 		Object[] message = {
-			"Gross weight :", txtGrossWeight,	
+			"Gross weight (Tonnes):", txtGrossWeight,	
 		    "Number of Seats:", txtNumOfSeats
 		};
 
@@ -640,7 +640,7 @@ public class TrainGUI extends JFrame{
 		cbGoodsType.setSelectedIndex(-1);
 		
 		Object[] message = {
-			"Gross weight :", txtGrossWeight,	
+			"Gross weight (Tonnes):", txtGrossWeight,	
 		    "GoodsType:", cbGoodsType
 		};
 
@@ -677,7 +677,7 @@ public class TrainGUI extends JFrame{
 		cleanDisplay(this.displayConductorInfo);
 		
 		//clean up train images
-		pnlShowImage.removeAll();
+		removeAllImages();
 	}
 
 	

@@ -8,7 +8,8 @@ import asgn2Exceptions.TrainException;
 
 /**
  * This class has a role as the Controller for TrainGUI(the view) and TrainModel(the model)
- * 
+ * Within this class train model, which is corresponded with departing train class, is created an object
+ * @author Lalu Fahany Yazikri
  * @author Yudo Dwi Hanggodo Patriabekti
  * */
 
@@ -69,9 +70,11 @@ public class TrainController{
 				resetGame();
 			}
 			setBoardbtnEnable();
-			
+			setRemovebtnEnable();
 		}
 	}
+	
+	
 
 	/**
 	 * Enable board button if the seats on train are available 
@@ -84,6 +87,19 @@ public class TrainController{
 		view.setBoardbtnEnable(isEnable);
 	}
 
+	/**
+	 * 
+	 * Enable remove button if minimum one carriage exists 
+	 */
+	private void setRemovebtnEnable(){
+		boolean isEnable = false;
+		
+		if(model.isLocomotiveExist()){
+			isEnable = true;
+		}
+		view.setRemoveCrgBtnEnable(isEnable);
+	}
+	
 	
 	/**
 	 * Reset the game. Call the newTrain method in the model and the resetGame in the view

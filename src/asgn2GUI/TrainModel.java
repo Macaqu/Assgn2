@@ -9,7 +9,7 @@ import asgn2RollingStock.*;
 	
 /**
  * @author Lalu Fahany Yazikri
- * 
+ * @author Yudo Dwi Hanggodo Patriabekti
  * */
 public class TrainModel  {
 	
@@ -40,9 +40,9 @@ public class TrainModel  {
 	
 	/**
 	 * 
-	 * @param CarriageTypes carriage : 
+	 * @param CarriageTypes carriage : The type of carriage that is defined in CarriageTypes enum
 	 * 
-	 * @return String
+	 * @return String - a representation of carriage type in a string form
 	 */
 	private static String getCarriageName(CarriageTypes carriage){
 		String carName = "";
@@ -59,7 +59,7 @@ public class TrainModel  {
 	
 	/**
 	 * 
-	 * @return double
+	 * @return double - the total GrossWeight in this train 
 	 */
 	public double getGrossWeight(){
 		double grossWeight = 0;
@@ -111,7 +111,11 @@ public class TrainModel  {
 		return info;
 	}
 	
-	
+	/**
+	 * String factory for the driver warning. This method will be invoked while the train is unable to move
+	 * 
+	 * @return a string for driver warning 
+	 */
 	public String getDriverWarning(){
 		String warning = "";
 		if(!train.trainCanMove()){
@@ -128,13 +132,17 @@ public class TrainModel  {
 	/**
 	 * Call boolean trainCanMove in the train instance
 	 * 
-	 * @return boolean
+	 * @return boolean - true if the train can move
 	 */
 	public boolean trainCanMove(){
 		return train.trainCanMove();
 	}
 	
-	
+	/**
+	 * This method produces the collection of the carriage Images representing the train
+	 * 
+	 * @return ArrayList<CarriageImage> - the collection of the carriage Images representing the train
+	 */
 	public ArrayList<CarriageImage> getCarriageImage(){
 		ArrayList<CarriageImage> carriageImageList = new ArrayList<CarriageImage>();
 		
@@ -176,7 +184,10 @@ public class TrainModel  {
 		return getTypeOf(carriage);
 	}
 	
-	
+	/**
+	 * @param RollingStock carriage
+ 	 * @return CarriageTypes: the type of the specific carriage 
+	 */
 	public CarriageTypes getTypeOf(RollingStock carriage){
 		CarriageTypes type = null;
 		
@@ -337,7 +348,7 @@ public class TrainModel  {
 	
 	
 	/**
-	 * 
+	 * This method will be invoked when removing carriage
 	 * @throws TrainException
 	 */
 	public void removeCarriage() throws TrainException{
@@ -399,6 +410,12 @@ public class TrainModel  {
 		return train.numberOfSeats() - train.numberOnBoard();
 	}
 	
+	/**
+	 *  @return boolean - true if first carriage is not null
+	 */
+	public boolean isLocomotiveExist(){
+		return train.firstCarriage() != null;
+	}
 	
 	/**
 	 * 
