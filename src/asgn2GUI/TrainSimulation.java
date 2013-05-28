@@ -5,7 +5,7 @@ import javax.swing.JFrame;
 /**
  * the main entry of Train Simulation
  * 
- * @author Lalu Fahany Yazikri
+ * @author Yudo Dwi Hanggodo Patriabekti
  */
 public class TrainSimulation {
 
